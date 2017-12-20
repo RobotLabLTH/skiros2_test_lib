@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find skiros2_test_lib)/launch/main.launch">
+    <arg name="primitive_list" default="[pose_generator, linear_mover, angular_mover, pose_follower]"/>
+    <arg name="skill_list" value="[follow_pose]" />
+    <arg name="run_rviz" value="true" />
+  </include>
+</launch>

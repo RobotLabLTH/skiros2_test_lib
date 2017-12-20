@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find skiros2_test_lib)/launch/main.launch">
+    <arg name="primitive_list" default="[trajectory_generator, trajectory_consumer]"/>
+    <arg name="skill_list" value="[trajectory_coordinator]" />
+    <arg name="run_rviz" value="false" />
+  </include>
+</launch>
