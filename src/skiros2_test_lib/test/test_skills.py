@@ -68,7 +68,7 @@ class test_primitive(PrimitiveBase):
         self.index = 0
         f = self.params["Force"].value
         print "Send force {}".format(f)
-        return State.Running
+        return True
         
     def execute(self):    
         self.index += 1

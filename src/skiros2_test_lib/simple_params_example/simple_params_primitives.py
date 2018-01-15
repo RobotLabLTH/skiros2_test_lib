@@ -76,7 +76,7 @@ class trajectory_generator(PrimitiveBase):
         self.is_done = False
         self.worker = threading.Thread(target=self.plan)
         self.worker.start()
-        return self.step("Start")
+        return True
         
     def createDescription(self):
         self.setDescription(TrajectoryGenerator(), self.__class__.__name__)

@@ -72,7 +72,6 @@ class TargetFollow(SkillDescription):
 class wait(PrimitiveBase):
     """
     """    
-    
     def createDescription(self):
         self.setDescription(Wait(), self.__class__.__name__)
         
@@ -103,7 +102,7 @@ class wander_around(PrimitiveBase):
     def onStart(self):    
         my_turtle = self.params["Robot"].value.getProperty("tts:TurtleName").value
         self.pose_pub = rospy.Publisher(my_turtle+"/cmd_vel", Twist, queue_size=20)
-        return self.step("Start")
+        return True
         
     def execute(self):
         self._sendCmd()
@@ -179,7 +178,7 @@ class target_follow(PrimitiveBase):
         self.opose_sub = rospy.Subscriber(other_turtle+"/pose", ts.Pose, self._otherPoseMonitor)
         self.mpose_sub = rospy.Subscriber(my_turtle+"/pose", ts.Pose, self._selfPoseMonitor)
         self.pose_pub = rospy.Publisher(my_turtle+"/cmd_vel", Twist, queue_size=20)
-        return self.step("Start")
+        return True
     
     def execute(self):
         self.p_gain = self.params["Pgain"].getValue()
