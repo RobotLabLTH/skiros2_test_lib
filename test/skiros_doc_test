@@ -33,6 +33,7 @@
 from skiros2_common.core import property, params, world_element
 from skiros2_common.ros import utils
 from skiros2_std_reasoners import aau_spatial_reasoner
+from skiros2_common.core import conditions
 import doctest
 
 verbose = False
@@ -41,7 +42,7 @@ from skiros2_skill.ros.skill_manager import SkillManager
 from skiros2_skill.core.skill import SkillBase
 from skiros2_common.core.primitive import PrimitiveBase
 import skiros2_test_lib.test as ts
-import rospy 
+import rospy
 
 def testVisitors():
     rospy.init_node("skill_mgr", anonymous=False)
@@ -60,7 +61,7 @@ def testVisitors():
         uid = sm.addTask([s])
         sm.executeTask(uid, track_params=track_params)
         sm._tasks.join(uid)
-            
+
 if __name__ == '__main__':
     print("========= TEST WITH DOCTEST ===========")
     if True:
@@ -86,6 +87,11 @@ if __name__ == '__main__':
     if True:
         print("========= Testing World Element =========")
         doctest.testmod(world_element, verbose=verbose)
+        if r.failed == 0:
+            print "OK"
+    if True:
+        print("========= Testing Conditions =========")
+        doctest.testmod(conditions, verbose=verbose)
         if r.failed == 0:
             print "OK"
     if False:
