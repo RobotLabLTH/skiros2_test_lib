@@ -41,84 +41,82 @@ import math
 #################################################################################
 # Descriptions
 #################################################################################
-    
+
 class Wait(SkillDescription):
     def createDescription(self):
-        self._type = ":Wait"
         #=======Params=========
-        
+        pass
+
 class Wander(SkillDescription):
     def createDescription(self):
-        self._type = ":Wander"
         #=======Params=========
-        
+        pass
+
 class TurtleFind(SkillDescription):
     def createDescription(self):
-        self._type = ":TurtleFind"
         #=======Params=========
         self.addParam("Turtle", Element("sumo:Object"), ParamTypes.Optional)
-        
+
 class TargetFollow(SkillDescription):
     def createDescription(self):
-        self._type = ":TargetFollow"
         #=======Params=========
-        self.addParam("Target", Element("sumo:Object"), ParamTypes.World)
-        self.addParam("Pgain", 2, ParamTypes.Config)
+        self.addParam("Target", Element("sumo:Object"), ParamTypes.Required)
+        self.addParam("Pgain", 2, ParamTypes.Required)
 
 #################################################################################
 # Implementations
 #################################################################################
-        
+
 class wait(PrimitiveBase):
     """
-    """    
+    """
     def createDescription(self):
         self.setDescription(Wait(), self.__class__.__name__)
-        
+
     def onPreempt(self):
         return self.success("Done")
-        
+
     def execute(self):
         return self.step("")
-        
+
 class wander_around(PrimitiveBase):
     """
-    """    
+    """
     counter = 0
-    
+
     def createDescription(self):
         self.setDescription(Wander(), self.__class__.__name__)
-        
+
     def _sendCmd(self):
         msg = Twist()
         self.counter += 0.1
         msg.linear.x = math.sin(self.counter)
         self.pose_pub.publish(msg)
-        return msg 
-        
-    def onReset(self):    
+        return msg
+
+    def onReset(self):
         self.counter = 0
-        
-    def onStart(self):    
+
+    def onStart(self):
         my_turtle = self.params["Robot"].value.getProperty("tts:TurtleName").value
         self.pose_pub = rospy.Publisher(my_turtle+"/cmd_vel", Twist, queue_size=20)
         return True
-        
+
     def execute(self):
         self._sendCmd()
         return self.step("")
-        
-        
+
+
 class turtle_find(PrimitiveBase):
     """
-    """    
+    """
     def createDescription(self):
         self.setDescription(TurtleFind(), self.__class__.__name__)
-        
-        
+
+
     def execute(self):
         my_turtle = self.params["Robot"].value.getProperty("tts:TurtleName").value
-        other_turtle = self.params["Turtle"].value 
+        other_turtle = self.params["Turtle"].value
         #Retrieve
         tlist = [topic.replace("/pose", "") for topic, type in rospy.get_published_topics() if type=='turtlesim/Pose' and topic.find(my_turtle)==-1]
         if tlist:
@@ -128,7 +126,7 @@ class turtle_find(PrimitiveBase):
             return self.success("Detected turtle {}".format(tlist[0]))
         #return self.step("")
         return self.fail("", -1)
-        
+
 class target_follow(PrimitiveBase):
     """
     """
@@ -139,17 +137,17 @@ class target_follow(PrimitiveBase):
     p_gain = 0
     counter = 0
     go_forward = False
-    
-    
+
+
     def createDescription(self):
         self.setDescription(TargetFollow(), self.__class__.__name__)
-        
-    def _otherPoseMonitor(self, msg):    
+
+    def _otherPoseMonitor(self, msg):
         self.target_pose = numpy.array([msg.x, msg.y, msg.theta])
-    
-    def _selfPoseMonitor(self, msg):    
+
+    def _selfPoseMonitor(self, msg):
         self.self_pose = numpy.array([msg.x, msg.y, msg.theta])
-        
+
     def _sendCmd(self):
         msg = Twist()
         diff = numpy.array([(self.target_pose[0]-self.self_pose[0]), (self.target_pose[1]-self.self_pose[1])])
@@ -171,20 +169,20 @@ class target_follow(PrimitiveBase):
         self.go_forward = False
         self.target_pose = numpy.array([0,0,0])
         self.self_pose = numpy.array([0,0,0.05])
-        
-    def onStart(self):    
+
+    def onStart(self):
         my_turtle = self.params["Robot"].value.getProperty("tts:TurtleName").value
         other_turtle = self.params["Target"].value.getProperty("tts:TurtleName").value
         self.opose_sub = rospy.Subscriber(other_turtle+"/pose", ts.Pose, self._otherPoseMonitor)
         self.mpose_sub = rospy.Subscriber(my_turtle+"/pose", ts.Pose, self._selfPoseMonitor)
         self.pose_pub = rospy.Publisher(my_turtle+"/cmd_vel", Twist, queue_size=20)
         return True
-    
+
     def execute(self):
         self.p_gain = self.params["Pgain"].getValue()
-        
+
         cmd = self._sendCmd()
-        
+
         if abs(cmd.linear.x)>0.5 or abs(cmd.angular.z)>0:
             self.counter = 0
             return self.step("Speed: {} {}".format(cmd.linear.x, cmd.angular.z))

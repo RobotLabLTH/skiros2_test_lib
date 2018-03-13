@@ -36,27 +36,27 @@ from skiros2_common.core.primitive import PrimitiveBase
 #################################################################################
 # Descriptions
 #################################################################################
-    
+
 class PoseGenerator(SkillDescription):
     def createDescription(self):
         self._type = ":PoseGenerator"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Optional)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Optional)
-        
+
 class PoseMover(SkillDescription):
     def createDescription(self):
         self._type = ":PoseMover"
         #=======Params=========
-        self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.World)
-        self.addParam("Direction", 0, ParamTypes.Config, description="x: 0, y: 1, z: 2")
-        
+        self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Direction", 0, ParamTypes.Required, description="x: 0, y: 1, z: 2")
+
 class PoseFollower(SkillDescription):
     def createDescription(self):
         self._type = ":PoseFollower"
         #=======Params=========
-        self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.World)
-        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.World)
+        self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
 
 #################################################################################
 # Implementations
@@ -68,7 +68,7 @@ class pose_generator(PrimitiveBase):
     """
     def createDescription(self):
         self.setDescription(PoseGenerator(), self.__class__.__name__)
-        
+
     def execute(self):
         if self._progress_code==0:
             return self.step("Start")
@@ -88,48 +88,48 @@ class pose_generator(PrimitiveBase):
                 pose2.addRelation("skiros:Scene-0", "skiros:contain", "-1")
                 self.params["Pose2"].value = pose2
             return self.success("Done")
-        
+
 class linear_mover(PrimitiveBase):
     """
     This primitive has 1 state when progress is < 10 and 1 state of success
     """
     def createDescription(self):
         self.setDescription(PoseMover(), self.__class__.__name__)
-                
+
     def execute(self):
         pose = self.params["Pose"].value
         direction = self._params.getParamValue("Direction")
         position = pose.getData(":Position")
         position[direction] = position[direction] + 0.1
-        pose.setData(":Position", position)  
+        pose.setData(":Position", position)
         self.params["Pose"].value = pose
         if self._progress_code<10:
             return self.step("Changing position to: {}".format(position))
         else:
             return self.success("Done")
-        
+
 class angular_mover(PrimitiveBase):
     """
     This primitive has 1 state when progress is < 10 and 1 state of success
     """
     def createDescription(self):
         self.setDescription(PoseMover(), self.__class__.__name__)
-                
+
     def onPreempt(self):
         return self.success("Done")
-        
+
     def execute(self):
         pose = self.params["Pose"].value
         o = pose.getData(":OrientationEuler")
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
-        pose.setData(":OrientationEuler", o)  
+        pose.setData(":OrientationEuler", o)
         self.params["Pose"].value = pose
         if self._progress_code<10:
             return self.step("Changing orientation to: {}".format(o))
         else:
             return self.success("Done")
-            
+
 #import math
 
 class rotation_mover(PrimitiveBase):
@@ -137,30 +137,30 @@ class rotation_mover(PrimitiveBase):
     """
     def createDescription(self):
         self.setDescription(PoseMover(), self.__class__.__name__)
-                
+
     def onPreempt(self):
         return self.success("Done")
-        
+
     def execute(self):
         pose = self.params["Pose"].value
 #        p = pose.getData(":Position")
         o = pose.getData(":OrientationEuler")
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
-        pose.setData(":OrientationEuler", o)  
+        pose.setData(":OrientationEuler", o)
         self.params["Pose"].value = pose
         return self.step("Changing orientation to: {}".format(o))
-            
+
 class pose_follower(PrimitiveBase):
     """
     This primitive doesn't stop until it is preempted explicitely
     """
     def createDescription(self):
         self.setDescription(PoseFollower(), self.__class__.__name__)
-        
+
     def onPreempt(self):
         return self.success("Done")
-        
+
     def execute(self):
         pose = self._params.getParamValue("Pose")
         pose2 = self._params.getParamValue("Pose2")
@@ -171,6 +171,6 @@ class pose_follower(PrimitiveBase):
             if diff!=0:
                 diff = diff/2
             position2[i] -= diff
-        pose2.setData(":Position", position2)  
-        self.params["Pose2"].value = pose2  
+        pose2.setData(":Position", position2)
+        self.params["Pose2"].value = pose2
         return self.step("Following pose: {}".format(position))

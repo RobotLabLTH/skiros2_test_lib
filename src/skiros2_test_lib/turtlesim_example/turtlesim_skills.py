@@ -31,21 +31,20 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase, Serial, ParallelFf, Selector
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
-        
+
 #################################################################################
 # Description
 #################################################################################
-    
+
 class TurtleFindAndFollow(SkillDescription):
     def createDescription(self):
-        self._type = ":TurtleFindAndFollow"
         #=======Params=========
-        self.addParam("Turtle", Element("sumo:Object"), ParamTypes.Optional)             
-        
+        self.addParam("Turtle", Element("sumo:Object"), ParamTypes.Optional)
+
 #################################################################################
 # Implementation
 #################################################################################
-        
+
 class patrol_and_follow(SkillBase):
     """
     Tree is:
@@ -56,7 +55,7 @@ class patrol_and_follow(SkillBase):
     """
     def createDescription(self):
         self.setDescription(TurtleFindAndFollow(), self.__class__.__name__)
-        
+
     def expand(self, skill):
         skill.setProcessor(Selector())
         skill.addChild(self.getNode(Serial()))
@@ -64,7 +63,7 @@ class patrol_and_follow(SkillBase):
         skill.last().addChild(self.getSkill(":TargetFollow", ""))
         skill.last().last().remap('Target', 'Turtle')
         skill.addChild(self.getSkill(":Wander", ""))
-        
+
 class stay_still_and_follow(SkillBase):
     """
     Tree is:
@@ -75,7 +74,7 @@ class stay_still_and_follow(SkillBase):
     """
     def createDescription(self):
         self.setDescription(TurtleFindAndFollow(), self.__class__.__name__)
-        
+
     def expand(self, skill):
         skill.setProcessor(Selector())
         skill.addChild(self.getNode(Serial()))

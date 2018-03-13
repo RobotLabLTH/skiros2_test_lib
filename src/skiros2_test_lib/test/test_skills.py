@@ -35,48 +35,47 @@ from skiros2_common.core.params import ParamTypes
 #################################################################################
 # Description
 #################################################################################
-    
+
 class TestPrimitive(SkillDescription):
     def createDescription(self):
-        self._type = ":TestPrimitive"
         #=======Params=========
-        self.addParam("Force", 0.0, ParamTypes.Config)
+        self.addParam("Force", 0.0, ParamTypes.Required)
         #=======PreConditions=========
-        
+
 class TestSkill(SkillDescription):
     def createDescription(self):
-        self._type = ":TestSkill"
         #=======Params=========
         #=======PreConditions=========
-        
+        pass
+
 #################################################################################
 # Implementation
 #################################################################################
-        
- 
+
+
 class test_primitive(PrimitiveBase):
     def createDescription(self):
         self.setDescription(TestPrimitive(), self.__class__.__name__)
-                          
+
     def onPreempt(self):
         return self.success("Stopped")
-        
+
     def onInit(self):
         return True
-        
+
     def onStart(self):
         self.index = 0
         f = self.params["Force"].value
         print "Send force {}".format(f)
         return True
-        
-    def execute(self):    
+
+    def execute(self):
         self.index += 1
         if self.index > 10:
             return self.success("Done")
         return self.step("")
-    
-        
+
+
 class test_skill(SkillBase):
     """
     Tree is:
@@ -87,7 +86,7 @@ class test_skill(SkillBase):
     """
     def createDescription(self):
         self.setDescription(TestSkill(), self.__class__.__name__)
-        
+
     def expand(self, skill):
         skill.addChild(self.getSkill(":TestPrimitive", ""))
         #skill.last().specifyParamDefault("Force", 0.0)
