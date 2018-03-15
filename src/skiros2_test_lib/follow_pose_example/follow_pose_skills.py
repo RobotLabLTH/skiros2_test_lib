@@ -31,25 +31,25 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
-        
-    
+
+
 #################################################################################
 # Description
 #################################################################################
-    
+
 class FollowPose(SkillDescription):
     def createDescription(self):
         self._type = ":FollowPose"
         #=======Params=========
-        #self.addParam("Container", Element(":Location"), ParamTypes.World)
+        #self.addParam("Container", Element(":Location"), ParamTypes.Required)
         #self.addParam("Object", Element(":Product"), ParamTypes.Optional)
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Optional)
-        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Optional)                 
-        
+        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Optional)
+
 #################################################################################
 # Implementation
 #################################################################################
-        
+
 class follow_pose(SkillBase):
     """
     Tree is:
@@ -61,7 +61,7 @@ class follow_pose(SkillBase):
     """
     def createDescription(self):
         self.setDescription(FollowPose(), self.__class__.__name__)
-        
+
     def expand(self, skill):
         skill.addChild(self.getSkill(":PoseGenerator", ""))
         skill.addChild(self.getNode(ParallelFs()))

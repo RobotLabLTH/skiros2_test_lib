@@ -1,7 +1,7 @@
 <launch>
   <arg name="primitive_list" default="[pose_generator, linear_mover, pose_follower]"/>
   <arg name="skill_list" default="[locate_fake, drive_fake, pick_fake, place_fake, follow_pose]"/>
-	
+
   <arg name="hardware_interface" default="PositionJointInterface" />
   <arg name="robot_ontology_prefix" default="" />
   <arg name="robot_name" default="test_robot" />
@@ -17,6 +17,7 @@
   <include file="$(find skiros2)/launch/world_model_server.launch">
       <arg name="init_scene" value=""/>
       <arg name="verbose" value="false"/>
+      <arg name="gui" value="true"/>
       <arg name="reasoners_pkgs" value="[skiros2_std_reasoners]"/>
       <arg name="workspace_dir" value="$(find skiros2_test_lib)/owl"/>
       <arg name="debug" value="$(arg debug)"/>
@@ -31,6 +32,4 @@
       <arg name="robot_ontology_prefix" value="$(arg robot_ontology_prefix)"/>
       <arg name="robot_name" value="$(arg robot_name)"/>
   </include>
-
-  <node name="skiros_gui" pkg="rqt_gui" type="rqt_gui" args="-s gui.skiros" output="screen" />
 </launch>

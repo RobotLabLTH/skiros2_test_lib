@@ -9,18 +9,16 @@ from actionlib.msg import TestAction, TestGoal
 
 class ActionSkillDescription(SkillDescription):
     def createDescription(self):
-        self._type = ":ActionSkillDescription"
         #=======Params=========
-        self.addParam("InputParam", 0, ParamTypes.Config)
-        self.addParam("OutputParam", 0, ParamTypes.Config)
+        self.addParam("InputParam", 0, ParamTypes.Required)
+        self.addParam("OutputParam", 0, ParamTypes.Optional)
         #=======PreConditions=========
 
 class DriveDescription(SkillDescription):
     def createDescription(self):
-        self._type = ":PhantomCtrl"
         #=======Params=========
-        self.addParam("Mode", 'DIFFERENTIAL', ParamTypes.Config)
-        self.addParam("Target", '', ParamTypes.Config)
+        self.addParam("Mode", 'DIFFERENTIAL', ParamTypes.Required)
+        self.addParam("Target", '', ParamTypes.Required)
         #=======PreConditions=========
 
 class PrimitiveActionClient(PrimitiveBase):
