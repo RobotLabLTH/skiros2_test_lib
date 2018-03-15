@@ -4,7 +4,6 @@
   <arg name="skill_list" default="[]" />
   <arg name="debug" default="false"/>
 
-
   <node launch-prefix="xterm -geometry 100x60+1280+0 -hold -e" pkg="skiros2_test_lib" type="test_action_server" name="as"/>
 
   <include file="$(find skiros2)/launch/world_model_server.launch">
@@ -25,4 +24,7 @@
       <arg name="robot_ontology_prefix" value=""/>
       <arg name="robot_name" value="test_robot"/>
   </include>
+  
+  <node name="skiros_gui" pkg="rqt_gui" type="rqt_gui" args="-s gui.skiros" output="screen" />
+  
 </launch>
