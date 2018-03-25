@@ -24,5 +24,4 @@
       <arg name="robot_ontology_prefix" value=""/>
       <arg name="robot_name" value="test_robot"/>
   </include>
-
 </launch>
