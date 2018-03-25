@@ -47,7 +47,7 @@ class Locate(SkillDescription):
         self.addParam("Camera", Element("skiros:Camera"), ParamTypes.Required, [ParamOptions.Lock])
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Container", True))
-        self.addPreCondition(self.getAbsRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True));
+        self.addPreCondition(self.getAbstractRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True));
         #=======PostConditions=========
         self.addPostCondition(self.getRelationCond("InContainer", "skiros:contain", "Container", "Object", True));
         self.addPostCondition(self.getHasPropCond("HasPosition", "skiros:Position", "Object", True))
