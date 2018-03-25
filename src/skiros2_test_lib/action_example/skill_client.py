@@ -39,8 +39,7 @@ class PrimitiveActionClient(PrimitiveBase):
         self._done = None
         self.client = self.buildClient()
         if not self.client.wait_for_server(rospy.Duration(0.1)):
-            log.error("[{}]".format(self._label), "Action server is not available.")
-            return False
+            return self.startError("Action server is not available.", -1)
         self.client.send_goal(self.buildGoal(), done_cb= self._doneCb, feedback_cb = self._feedbackCb)
         return True
 

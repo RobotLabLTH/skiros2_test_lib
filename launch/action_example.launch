@@ -24,7 +24,5 @@
       <arg name="robot_ontology_prefix" value=""/>
       <arg name="robot_name" value="test_robot"/>
   </include>
-  
-  <node name="skiros_gui" pkg="rqt_gui" type="rqt_gui" args="-s gui.skiros" output="screen" />
-  
+
 </launch>
