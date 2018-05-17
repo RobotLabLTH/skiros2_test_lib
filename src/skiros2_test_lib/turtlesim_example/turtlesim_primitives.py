@@ -35,6 +35,7 @@ from skiros2_common.core.primitive import PrimitiveBase
 import rospy
 import turtlesim.msg as ts
 from geometry_msgs.msg import Twist
+from turtlesim.srv import Spawn
 import threading, Queue, numpy
 import math
 
@@ -52,6 +53,11 @@ class Wander(SkillDescription):
         #=======Params=========
         pass
 
+class Wander2(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("Name", str, ParamTypes.Required)
+
 class TurtleFind(SkillDescription):
     def createDescription(self):
         #=======Params=========
@@ -61,7 +67,15 @@ class TargetFollow(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Target", Element("sumo:Object"), ParamTypes.Required)
-        self.addParam("Pgain", 2, ParamTypes.Required)
+        self.addParam("Pgain", 1, ParamTypes.Required)
+
+class TurtleSpawn(SkillDescription):
+    def createDescription(self):
+        #=======Params=========
+        self.addParam("PosX", int, ParamTypes.Required)
+        self.addParam("PosY", int, ParamTypes.Required)
+        self.addParam("Rotation", int, ParamTypes.Required)
+        self.addParam("Name", str, ParamTypes.Required)
 
 #################################################################################
 # Implementations
@@ -100,6 +114,34 @@ class wander_around(PrimitiveBase):
     def onStart(self):
         my_turtle = self.params["Robot"].value.getProperty("tts:TurtleName").value
         self.pose_pub = rospy.Publisher(my_turtle+"/cmd_vel", Twist, queue_size=20)
+        return True
+
+    def execute(self):
+        self._sendCmd()
+        return self.step("")
+
+
+class wander_around_2(PrimitiveBase):
+    """
+    Same as wander_around except for the name of the topic that is published (it depends on the "Name" parameters and not on the "Robot" parameter)
+    """
+    counter = 0
+
+    def createDescription(self):
+        self.setDescription(Wander2(), self.__class__.__name__)
+
+    def _sendCmd(self):
+        msg = Twist()
+        self.counter += 0.1
+        msg.linear.x = math.sin(self.counter)
+        self.pose_pub.publish(msg)
+        return msg
+
+    def onReset(self):
+        self.counter = 0
+
+    def onStart(self):
+        self.pose_pub = rospy.Publisher(self.params["Name"].getValue()+"/cmd_vel", Twist, queue_size=20)
         return True
 
     def execute(self):
@@ -191,3 +233,22 @@ class target_follow(PrimitiveBase):
             if self.counter>20:
                 return self.success("")
         return self.step("")
+
+
+class turtle_spawn(PrimitiveBase):
+    """
+    """
+    def createDescription(self):
+        self.setDescription(TurtleSpawn(), self.__class__.__name__)
+
+    def onStart(self):
+        rospy.wait_for_service('spawn')
+        try:
+            turtle_spawner = rospy.ServiceProxy('spawn', Spawn)
+            resp = turtle_spawner(self.params["PosX"].getValue() , self.params["PosY"].getValue() , self.params["Rotation"].getValue() ,  self.params["Name"].getValue())
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
+        return True
+
+    def execute(self):
+        return self.success("turtle spawned")
