@@ -28,7 +28,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs
+from skiros2_skill.core.skill import SkillDescription, SkillBase, ParallelFs, Sequential, Serial, ParallelFf
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -45,6 +45,11 @@ class FollowPose(SkillDescription):
         #self.addParam("Object", Element(":Product"), ParamTypes.Optional)
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Optional)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Optional)
+
+class PickAndPlace(SkillDescription):
+    def createDescription(self):
+        self._type = ":PickAndPlace"
+        #=======Params=========
 
 #################################################################################
 # Implementation
@@ -64,9 +69,76 @@ class follow_pose(SkillBase):
 
     def expand(self, skill):
         skill.addChild(self.getSkill(":PoseGenerator", ""))
-        skill.addChild(self.getNode(ParallelFs()))
-        skill.last().addChild(self.getSkill(":PoseMover", "linear_mover"))
+        parallel_node = self.getNode(ParallelFs())
+        skill.addChild(parallel_node)
+        parallel_node.addChild(self.getSkill(":PoseMover", "linear_mover"))
         skill.last().last().specifyParamDefault("Direction", 0)
         skill.last().addChild(self.getSkill(":PoseMover", ""))
         skill.last().last().specifyParamDefault("Direction", 1)
         skill.last().addChild(self.getSkill(":PoseFollower", ""))
+
+
+class pick_and_place(SkillBase):
+    """
+    Tree is:
+    ----->:Sequential
+    ------->:PoseGenerator
+    ------->:PoseGenerator
+    ------->:PoseGenerator
+    ----->:ParallelFf
+    ------->:PoseMover, "pose_circle_mover"
+    ------->:Sequential
+    --------->:PoseFollower, "pose_follower_xy"
+    --------->:PoseFollower, "pose_follower"
+    --------->:PoseFollower, "pose_follower"
+    """
+    def createDescription(self):
+        self.setDescription(FollowPose(), self.__class__.__name__)
+
+    def expand(self, skill):
+
+        sequential_node1 = self.getNode(Sequential())
+        skill.addChild(sequential_node1)
+
+        #the pose that is going to move in circle (aka the first target)
+        pose_generator1 = self.getSkill(":PoseGenerator", "")
+        sequential_node1.addChild(pose_generator1)
+        pose_generator1.specifyParamDefault("x", 1.)
+        pose_generator1.specifyParamDefault("y", 0.)
+        pose_generator1.specifyParamDefault("z", 0.)
+
+        #the pose that represents the robot
+        pose_generator2 = self.getSkill(":PoseGenerator", "")
+        sequential_node1.addChild(pose_generator2)
+        pose_generator2.remap("Pose", "Pose2")
+        pose_generator2.specifyParamDefault("x", 1.)
+        pose_generator2.specifyParamDefault("y", 1.)
+        pose_generator2.specifyParamDefault("z", 1.)
+
+        #the pose that represents the home (aka the second target)
+        pose_generator3 = self.getSkill(":PoseGenerator", "")
+        sequential_node1.addChild(pose_generator3)
+        pose_generator3.remap("Pose", "Pose3")
+        pose_generator3.specifyParamDefault("x", 0.)
+        pose_generator3.specifyParamDefault("y", 2.)
+        pose_generator3.specifyParamDefault("z", 2.)
+
+        parallel_node1 = self.getNode(ParallelFf())
+        skill.addChild(parallel_node1)
+
+        pose_circle_mover = self.getSkill(":PoseMover", "pose_circle_mover")
+        parallel_node1.addChild(pose_circle_mover)
+        pose_circle_mover.specifyParamDefault("Direction", 2)
+
+        sequential_node2 = self.getNode(Sequential())
+        parallel_node1.addChild(sequential_node2)
+
+        pose_follower_xy = self.getSkill(":PoseFollower", "pose_follower_xy")
+        sequential_node2.addChild(pose_follower_xy)
+
+        pose_follower1 = self.getSkill(":PoseFollower", "pose_follower")
+        sequential_node2.addChild(pose_follower1)
+
+        pose_follower2 = self.getSkill(":PoseFollower", "pose_follower")
+        sequential_node2.addChild(pose_follower2)
+        pose_follower2.remap("Pose", "Pose3")

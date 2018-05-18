@@ -33,6 +33,8 @@ from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 from skiros2_common.core.primitive import PrimitiveBase
 
+import numpy as np
+
 #################################################################################
 # Descriptions
 #################################################################################
@@ -42,7 +44,9 @@ class PoseGenerator(SkillDescription):
         self._type = ":PoseGenerator"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Optional)
-        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Optional)
+        self.addParam("x", float, ParamTypes.Required)
+        self.addParam("y", float, ParamTypes.Required)
+        self.addParam("z", float, ParamTypes.Required)
 
 class PoseMover(SkillDescription):
     def createDescription(self):
@@ -77,16 +81,11 @@ class pose_generator(PrimitiveBase):
         else:
             pose = self.params["Pose"].value
             if pose._id=="":
-                pose.setData(":Position", [0.0,0.0,0.0])
+                pose.setData(":Position", [self.params["x"].value, self.params["y"].value, self.params["z"].value])
                 pose.setData(":Orientation", [0.0,0.0,0.0,1.0])
                 pose.addRelation("skiros:Scene-0", "skiros:contain", "-1")
                 self.params["Pose"].value = pose
-            pose2 = self.params["Pose2"].value
-            if pose2._id=="":
-                pose2.setData(":Position", [-1.0,-1.0,-1.0])
-                pose2.setData(":Orientation", [0.0,0.0,0.0,1.0])
-                pose2.addRelation("skiros:Scene-0", "skiros:contain", "-1")
-                self.params["Pose2"].value = pose2
+
             return self.success("Done")
 
 class linear_mover(PrimitiveBase):
@@ -153,8 +152,11 @@ class rotation_mover(PrimitiveBase):
 
 class pose_follower(PrimitiveBase):
     """
-    This primitive doesn't stop until it is preempted explicitely
+    This primitive stops when is close to the target
     """
+    dist = 0
+    proximityThreshold = 0.05
+
     def createDescription(self):
         self.setDescription(PoseFollower(), self.__class__.__name__)
 
@@ -166,11 +168,92 @@ class pose_follower(PrimitiveBase):
         pose2 = self._params.getParamValue("Pose2")
         position = pose.getData(":Position")
         position2 = pose2.getData(":Position")
+        self.dist = 0
         for i in range(0, 3):
             diff = position2[i]-position[i]
+            self.dist += diff**2
             if diff!=0:
-                diff = diff/2
+                diff = diff/4
             position2[i] -= diff
         pose2.setData(":Position", position2)
         self.params["Pose2"].value = pose2
-        return self.step("Following pose: {}".format(position))
+
+        if self.dist >= self.proximityThreshold :
+            return self.step("Following pose: {}".format(position))
+        else :
+            return self.success("Successful following")
+
+class pose_follower_xy(PrimitiveBase):
+    """
+    Same as the other pose_follower except it only follows on x and y axis
+    """
+
+    dist = 0
+    proximityThreshold = 0.05
+
+    def createDescription(self):
+        self.setDescription(PoseFollower(), self.__class__.__name__)
+
+    def onPreempt(self):
+        return self.success("Done")
+
+    def execute(self):
+        pose = self._params.getParamValue("Pose")
+        pose2 = self._params.getParamValue("Pose2")
+        position = pose.getData(":Position")
+        position2 = pose2.getData(":Position")
+        self.dist = 0
+        for i in range(0, 2):
+            diff = position2[i]-position[i]
+            self.dist += diff**2
+            if diff!=0:
+                diff = diff/4
+            position2[i] -= diff
+        pose2.setData(":Position", position2)
+        self.params["Pose2"].value = pose2
+
+        if self.dist >= self.proximityThreshold :
+            return self.step("Following pose: {}".format(position))
+        else :
+            return self.success("Successful following on xy")
+
+
+
+class pose_circle_mover(PrimitiveBase):
+    """
+    Makes the selected pose turn around the selected axis
+    This primitive doesn't stop until it is preempted explicitely
+    """
+    angle = 0.05
+
+    def createDescription(self):
+        self.setDescription(PoseMover(), self.__class__.__name__)
+
+    def onPreempt(self):
+        return self.success("Done")
+
+    def execute(self):
+        pose = self.params["Pose"].value
+        p = pose.getData(":Position")
+        d = self._params.getParamValue("Direction")
+        rotationMatrix = np.array([[np.cos(self.angle), np.sin(self.angle)],[-np.sin(self.angle), np.cos(self.angle)]])
+        if d == 2 :
+            #in that case we turn around the z axis
+            xyRotated = np.dot(rotationMatrix, np.array([p[0],p[1]]))
+            p[0] = xyRotated[0]
+            p[1] = xyRotated[1]
+        elif d == 1 :
+            #in that case we turn around the y axis
+            xyRotated = np.dot(rotationMatrix, np.array([p[0],p[2]]))
+            p[0] = xyRotated[0]
+            p[2] = xyRotated[1]
+        elif d == 0 :
+            #in that case we turn around the x axis
+            xyRotated = np.dot(rotationMatrix, np.array([p[1],p[2]]))
+            p[1] = xyRotated[0]
+            p[2] = xyRotated[1]
+        else :
+            return self.fail("wrong direction", -1)
+        pose.setData(":Position", p)
+        self.params["Pose"].value = pose
+        return self.step("turning")
