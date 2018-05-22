@@ -88,9 +88,10 @@ class pick_and_place(SkillBase):
     ----->:ParallelFf
     ------->:PoseMover, "pose_circle_mover"
     ------->:Sequential
-    --------->:PoseFollower, "pose_follower_xy"
-    --------->:PoseFollower, "pose_follower"
-    --------->:PoseFollower, "pose_follower"
+    --------->:PoseFollower, "pose_follower_two_axis"
+    --------->:PoseFollower, "pose_follower_three_axis"
+    --------->:PoseFollower, "pose_follower_one_axis"
+    --------->:PoseFollower, "pose_follower_three_axis"
     """
     def createDescription(self):
         self.setDescription(FollowPose(), self.__class__.__name__)
@@ -133,12 +134,19 @@ class pick_and_place(SkillBase):
         sequential_node2 = self.getNode(Sequential())
         parallel_node1.addChild(sequential_node2)
 
-        pose_follower_xy = self.getSkill(":PoseFollower", "pose_follower_xy")
-        sequential_node2.addChild(pose_follower_xy)
+        pose_follower_two_axis_1 = self.getSkill(":PoseFollowerTwoAxis", "pose_follower_two_axis")
+        sequential_node2.addChild(pose_follower_two_axis_1)
+        pose_follower_two_axis_1.specifyParamDefault("Axis1", 0.)
+        pose_follower_two_axis_1.specifyParamDefault("Axis2", 1.)
 
-        pose_follower1 = self.getSkill(":PoseFollower", "pose_follower")
-        sequential_node2.addChild(pose_follower1)
+        pose_follower_three_axis_1 = self.getSkill(":PoseFollowerThreeAxis", "pose_follower_three_axis")
+        sequential_node2.addChild(pose_follower_three_axis_1)
 
-        pose_follower2 = self.getSkill(":PoseFollower", "pose_follower")
-        sequential_node2.addChild(pose_follower2)
-        pose_follower2.remap("Pose", "Pose3")
+        pose_follower_one_axis_1 = self.getSkill(":PoseFollowerOneAxis", "pose_follower_one_axis")
+        sequential_node2.addChild(pose_follower_one_axis_1)
+        pose_follower_one_axis_1.specifyParamDefault("Axis", 2.)
+        pose_follower_one_axis_1.remap("Pose", "Pose3")
+
+        pose_follower_three_axis_2 = self.getSkill(":PoseFollowerThreeAxis", "pose_follower_three_axis")
+        sequential_node2.addChild(pose_follower_three_axis_2)
+        pose_follower_three_axis_2.remap("Pose", "Pose3")

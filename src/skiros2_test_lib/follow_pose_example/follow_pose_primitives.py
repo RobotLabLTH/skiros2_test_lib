@@ -55,13 +55,29 @@ class PoseMover(SkillDescription):
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
         self.addParam("Direction", 0, ParamTypes.Required, description="x: 0, y: 1, z: 2")
 
-class PoseFollower(SkillDescription):
+class PoseFollowerOneAxis(SkillDescription):
     def createDescription(self):
-        self._type = ":PoseFollower"
+        self._type = ":PoseFollowerOneAxis"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Axis", float, ParamTypes.Required)
 
+class PoseFollowerTwoAxis(SkillDescription):
+    def createDescription(self):
+        self._type = ":PoseFollowerTwoAxis"
+        #=======Params=========
+        self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Axis1", float, ParamTypes.Required)
+        self.addParam("Axis2", float, ParamTypes.Required)
+
+class PoseFollowerThreeAxis(SkillDescription):
+    def createDescription(self):
+        self._type = ":PoseFollowerThreeAxis"
+        #=======Params=========
+        self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
+        self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
 #################################################################################
 # Implementations
 #################################################################################
@@ -129,8 +145,6 @@ class angular_mover(PrimitiveBase):
         else:
             return self.success("Done")
 
-#import math
-
 class rotation_mover(PrimitiveBase):
     """
     """
@@ -142,7 +156,6 @@ class rotation_mover(PrimitiveBase):
 
     def execute(self):
         pose = self.params["Pose"].value
-#        p = pose.getData(":Position")
         o = pose.getData(":OrientationEuler")
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
@@ -150,7 +163,78 @@ class rotation_mover(PrimitiveBase):
         self.params["Pose"].value = pose
         return self.step("Changing orientation to: {}".format(o))
 
-class pose_follower(PrimitiveBase):
+class pose_follower_one_axis(PrimitiveBase):
+    """
+    This primitive makes a pose follow another one along one given axis
+    It stops when is close to the target
+    """
+
+    dist = 0
+    proximityThreshold = 0.05
+
+    def createDescription(self):
+        self.setDescription(PoseFollowerOneAxis(), self.__class__.__name__)
+
+    def onPreempt(self):
+        return self.success("Done")
+
+    def execute(self):
+        pose = self._params.getParamValue("Pose")
+        pose2 = self._params.getParamValue("Pose2")
+        position = pose.getData(":Position")
+        position2 = pose2.getData(":Position")
+        self.dist = 0
+        axis = int(self._params.getParamValue("Axis"))
+        diff = position2[axis]-position[axis]
+        self.dist += diff**2
+        if diff!=0:
+            diff = diff/4
+            position2[axis] -= diff
+        pose2.setData(":Position", position2)
+        self.params["Pose2"].value = pose2
+
+        if self.dist >= self.proximityThreshold :
+            return self.step("Following pose: {}".format(position))
+        else :
+            return self.success("Successful following along axis: {}".format(axis))
+
+class pose_follower_two_axis(PrimitiveBase):
+    """
+        This primitive makes a pose follow another one along two given axis
+        It stops when is close to the target
+    """
+
+    dist = 0
+    proximityThreshold = 0.05
+
+    def createDescription(self):
+        self.setDescription(PoseFollowerTwoAxis(), self.__class__.__name__)
+
+    def onPreempt(self):
+        return self.success("Done")
+
+    def execute(self):
+        pose = self._params.getParamValue("Pose")
+        pose2 = self._params.getParamValue("Pose2")
+        position = pose.getData(":Position")
+        position2 = pose2.getData(":Position")
+        self.dist = 0
+        axis = [int(self._params.getParamValue("Axis1")), int(self._params.getParamValue("Axis2"))]
+        for i in axis :
+            diff = position2[i]-position[i]
+            self.dist += diff**2
+            if diff!=0:
+                diff = diff/4
+            position2[i] -= diff
+        pose2.setData(":Position", position2)
+        self.params["Pose2"].value = pose2
+
+        if self.dist >= self.proximityThreshold :
+            return self.step("Following pose: {}".format(position))
+        else :
+            return self.success("Successful following along axis: {}".format(axis))
+
+class pose_follower_three_axis(PrimitiveBase):
     """
     This primitive stops when is close to the target
     """
@@ -158,7 +242,7 @@ class pose_follower(PrimitiveBase):
     proximityThreshold = 0.05
 
     def createDescription(self):
-        self.setDescription(PoseFollower(), self.__class__.__name__)
+        self.setDescription(PoseFollowerThreeAxis(), self.__class__.__name__)
 
     def onPreempt(self):
         return self.success("Done")
@@ -183,41 +267,6 @@ class pose_follower(PrimitiveBase):
         else :
             return self.success("Successful following")
 
-class pose_follower_xy(PrimitiveBase):
-    """
-    Same as the other pose_follower except it only follows on x and y axis
-    """
-
-    dist = 0
-    proximityThreshold = 0.05
-
-    def createDescription(self):
-        self.setDescription(PoseFollower(), self.__class__.__name__)
-
-    def onPreempt(self):
-        return self.success("Done")
-
-    def execute(self):
-        pose = self._params.getParamValue("Pose")
-        pose2 = self._params.getParamValue("Pose2")
-        position = pose.getData(":Position")
-        position2 = pose2.getData(":Position")
-        self.dist = 0
-        for i in range(0, 2):
-            diff = position2[i]-position[i]
-            self.dist += diff**2
-            if diff!=0:
-                diff = diff/4
-            position2[i] -= diff
-        pose2.setData(":Position", position2)
-        self.params["Pose2"].value = pose2
-
-        if self.dist >= self.proximityThreshold :
-            return self.step("Following pose: {}".format(position))
-        else :
-            return self.success("Successful following on xy")
-
-
 
 class pose_circle_mover(PrimitiveBase):
     """
@@ -235,6 +284,7 @@ class pose_circle_mover(PrimitiveBase):
     def execute(self):
         pose = self.params["Pose"].value
         p = pose.getData(":Position")
+        o = pose.getData(":OrientationEuler")
         d = self._params.getParamValue("Direction")
         rotationMatrix = np.array([[np.cos(self.angle), np.sin(self.angle)],[-np.sin(self.angle), np.cos(self.angle)]])
         if d == 2 :
@@ -244,16 +294,19 @@ class pose_circle_mover(PrimitiveBase):
             p[1] = xyRotated[1]
         elif d == 1 :
             #in that case we turn around the y axis
-            xyRotated = np.dot(rotationMatrix, np.array([p[0],p[2]]))
-            p[0] = xyRotated[0]
-            p[2] = xyRotated[1]
+            xzRotated = np.dot(rotationMatrix, np.array([p[0],p[2]]))
+            p[0] = xzRotated[0]
+            p[2] = xzRotated[1]
         elif d == 0 :
             #in that case we turn around the x axis
-            xyRotated = np.dot(rotationMatrix, np.array([p[1],p[2]]))
-            p[1] = xyRotated[0]
-            p[2] = xyRotated[1]
+            yzRotated = np.dot(rotationMatrix, np.array([p[1],p[2]]))
+            p[1] = yzRotated[0]
+            p[2] = yzRotated[1]
         else :
             return self.fail("wrong direction", -1)
+
+        o[d] = o[d] - self.angle
+        pose.setData(":OrientationEuler", o)
         pose.setData(":Position", p)
         self.params["Pose"].value = pose
         return self.step("turning")
