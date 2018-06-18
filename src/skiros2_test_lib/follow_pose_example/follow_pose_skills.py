@@ -39,7 +39,6 @@ from skiros2_common.core.world_element import Element
 
 class FollowPose(SkillDescription):
     def createDescription(self):
-        self._type = ":FollowPose"
         #=======Params=========
         #self.addParam("Container", Element(":Location"), ParamTypes.Required)
         #self.addParam("Object", Element(":Product"), ParamTypes.Optional)
@@ -48,8 +47,8 @@ class FollowPose(SkillDescription):
 
 class PickAndPlace(SkillDescription):
     def createDescription(self):
-        self._type = ":PickAndPlace"
         #=======Params=========
+        pass
 
 #################################################################################
 # Implementation

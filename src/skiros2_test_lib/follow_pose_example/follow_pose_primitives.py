@@ -41,7 +41,6 @@ import numpy as np
 
 class PoseGenerator(SkillDescription):
     def createDescription(self):
-        self._type = ":PoseGenerator"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Optional)
         self.addParam("x", float, ParamTypes.Required)
@@ -50,14 +49,12 @@ class PoseGenerator(SkillDescription):
 
 class PoseMover(SkillDescription):
     def createDescription(self):
-        self._type = ":PoseMover"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
         self.addParam("Direction", 0, ParamTypes.Required, description="x: 0, y: 1, z: 2")
 
 class PoseFollowerOneAxis(SkillDescription):
     def createDescription(self):
-        self._type = ":PoseFollowerOneAxis"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
@@ -65,7 +62,6 @@ class PoseFollowerOneAxis(SkillDescription):
 
 class PoseFollowerTwoAxis(SkillDescription):
     def createDescription(self):
-        self._type = ":PoseFollowerTwoAxis"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
@@ -74,7 +70,6 @@ class PoseFollowerTwoAxis(SkillDescription):
 
 class PoseFollowerThreeAxis(SkillDescription):
     def createDescription(self):
-        self._type = ":PoseFollowerThreeAxis"
         #=======Params=========
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Required)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Required)
@@ -139,7 +134,7 @@ class angular_mover(PrimitiveBase):
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
         pose.setData(":OrientationEuler", o)
-        self.params["Pose"].value = pose
+        self._wmi.updateElementProperties(pose, "AauSpatialReasoner")
         if self._progress_code<10:
             return self.step("Changing orientation to: {}".format(o))
         else:
@@ -160,7 +155,7 @@ class rotation_mover(PrimitiveBase):
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
         pose.setData(":OrientationEuler", o)
-        self.params["Pose"].value = pose
+        self._wmi.updateElementProperties(o, "AauSpatialReasoner")
         return self.step("Changing orientation to: {}".format(o))
 
 class pose_follower_one_axis(PrimitiveBase):
@@ -308,5 +303,5 @@ class pose_circle_mover(PrimitiveBase):
         o[d] = o[d] - self.angle
         pose.setData(":OrientationEuler", o)
         pose.setData(":Position", p)
-        self.params["Pose"].value = pose
+        self._wmi.updateElementProperties(pose, "AauSpatialReasoner")
         return self.step("turning")

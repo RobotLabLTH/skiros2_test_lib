@@ -40,7 +40,6 @@ from skiros2_common.core.world_element import Element
 
 class Locate(SkillDescription):
     def createDescription(self):
-        self._type = ":Locate"
         #=======Params=========
         self.addParam("Container", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Object", Element("skiros:Product"), ParamTypes.Optional)
@@ -54,7 +53,6 @@ class Locate(SkillDescription):
 
 class Drive(SkillDescription):
     def createDescription(self):
-        self._type = ":Drive"
         #=======Params=========
         self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
@@ -66,7 +64,6 @@ class Drive(SkillDescription):
 
 class Pick(SkillDescription):
     def createDescription(self):
-        self._type = ":Pick"
         #=======Params=========
         self.addParam("Container", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Object", Element("skiros:Product"), ParamTypes.Optional)
@@ -83,7 +80,6 @@ class Pick(SkillDescription):
 
 class Place(SkillDescription):
     def createDescription(self):
-        self._type = ":Place"
         #=======Params=========
         self.addParam("PlacingLocation", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Object", Element("skiros:Product"), ParamTypes.Required)
