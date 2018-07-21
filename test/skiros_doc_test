@@ -71,27 +71,27 @@ if __name__ == '__main__':
             print "OK"
     if True:
         print("========= Testing params =========")
-        doctest.testmod(params, verbose=verbose)
+        r = doctest.testmod(params, verbose=verbose)
         if r.failed == 0:
             print "OK"
     if True:
         print("========= Testing json serialization =========")
-        doctest.testmod(utils, verbose=verbose)
+        r = doctest.testmod(utils, verbose=verbose)
         if r.failed == 0:
             print "OK"
     if True:
         print("========= Testing AauSpatialReasoner =========")
-        doctest.testmod(aau_spatial_reasoner, verbose=verbose)
+        r = doctest.testmod(aau_spatial_reasoner, verbose=verbose)
         if r.failed == 0:
             print "OK"
     if True:
         print("========= Testing World Element =========")
-        doctest.testmod(world_element, verbose=verbose)
+        r = doctest.testmod(world_element, verbose=verbose)
         if r.failed == 0:
             print "OK"
     if True:
         print("========= Testing Conditions =========")
-        doctest.testmod(conditions, verbose=verbose)
+        r = doctest.testmod(conditions, verbose=verbose)
         if r.failed == 0:
             print "OK"
     if False:
