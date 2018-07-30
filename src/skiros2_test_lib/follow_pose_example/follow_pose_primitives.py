@@ -134,7 +134,7 @@ class angular_mover(PrimitiveBase):
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
         pose.setData(":OrientationEuler", o)
-        self._wmi.updateElementProperties(pose, "AauSpatialReasoner")
+        self._wmi.update_element_properties(pose, "AauSpatialReasoner")
         if self._progress_code<10:
             return self.step("Changing orientation to: {}".format(o))
         else:
@@ -155,7 +155,7 @@ class rotation_mover(PrimitiveBase):
         d = self._params.getParamValue("Direction")
         o[d] = o[d] + 0.1
         pose.setData(":OrientationEuler", o)
-        self._wmi.updateElementProperties(o, "AauSpatialReasoner")
+        self._wmi.update_element_properties(o, "AauSpatialReasoner")
         return self.step("Changing orientation to: {}".format(o))
 
 class pose_follower_one_axis(PrimitiveBase):
@@ -303,5 +303,5 @@ class pose_circle_mover(PrimitiveBase):
         o[d] = o[d] - self.angle
         pose.setData(":OrientationEuler", o)
         pose.setData(":Position", p)
-        self._wmi.updateElementProperties(pose, "AauSpatialReasoner")
+        self._wmi.update_element_properties(pose, "AauSpatialReasoner")
         return self.step("turning")

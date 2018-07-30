@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+
+import rospy
+import skiros2_world_model.ros.world_model_interface as wmi
+from skiros2_common.core.world_element import Element
+import skiros2_common.tools.logger as log
+import unittest
+
+class WorldModelTester(unittest.TestCase):
+    def __init__(self):
+        rospy.init_node("wm_tester")
+        self.wmi = wmi.WorldModelInterface()
+        self.agent_name = "skiros:test_robot"
+        self._verbose = False
+        self.contexts = dict()
+        self.robot = None
+        self.location = None
+
+    def assert_equal(self, first, second, label):
+        if first!=second:
+            log.error(label, "Got: {} expected: {}".format(first, second))
+            return False
+        return True
+
+    def query(self):
+        return self.assert_equal(set(self.wmi.get_sub_properties("skiros:spatiallyRelated")), set(['skiros:spatiallyRelated', 'skiros:hasA', 'skiros:contain']), "query")
+
+    def add(self, context):
+        self.contexts[context] = dict()
+        robot = self.wmi.instanciate(self.agent_name, True, context_id=context)
+        self.contexts[context]['robot'] = robot
+        startLocUri = self.wmi.get_template_element(self.agent_name).getRelations(pred="skiros:hasStartLocation")
+        if startLocUri:
+            self.contexts[context]['location'] = self.wmi.instanciate(startLocUri[0]["dst"], False, [], context_id=context)
+            self.wmi.set_relation(robot.id, "skiros:at", self.contexts[context]['location'].id)
+        log.assertInfo(self._verbose, "[added]", "Context: {}. {}".format(context, [e.id for e in self.contexts[context].values()]))
+        return True
+
+    def get_and_update(self, context):
+        self.contexts[context]['robot'] = self.wmi.get_element(self.contexts[context]['robot'].id, context)
+        self.contexts[context]['robot'].setProperty("skiros:SkillMgr", self.agent_name)
+        self.wmi.update_element(self.contexts[context]['robot'], context_id=context)
+        log.assertInfo(self._verbose, "[updated]", "Context: {}. {}".format(context, self.contexts[context]['robot'].id))
+        return True
+
+    def resolve(self, context):
+        res = self.wmi.resolve_elements(Element("cora:Robot", self.agent_name), context_id=context)
+        log.assertInfo(self._verbose, "[resolved]", "Context: {}. {}".format(context, [e.printState() for e in res]))
+        return self.assert_equal(res[0].id, self.contexts[context]['robot'].id, "resolve")
+
+    def remove(self):
+        for cid, c in self.contexts.iteritems():
+            for e in c.values():
+                log.assertInfo(self._verbose, "Removed", "{} {}".format(cid, e.id))
+                self.wmi.remove_element(e.id, context_id=cid)
+        return True
+
+    def _print_recursive(self, name, d, indentation=""):
+        e = d[name]
+        print "{}->{}".format(indentation, e.printState())
+        for r in e.getRelations(subj="-1", pred=self.wmi.get_sub_properties("skiros:spatiallyRelated")):
+            self._print_recursive(r['dst'], d, indentation+"--")
+
+    def print_scene(self):
+        (scene, scene_id) = self.wmi.get_scene()
+        utility_dict = dict()
+        for e in scene:
+            utility_dict[e.id] = e
+        self._print_recursive("skiros:Scene-0", utility_dict)
+
+    def run(self):
+        log.assertInfo(self.query(), "[query]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        if self.add('scene'):
+            log.info("[add_element_scene]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        if self.add('database'):
+            log.info("[add_element_database]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        if self.get_and_update('scene'):
+            log.info("[get_and_update_scene]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        if self.get_and_update('database'):
+            log.info("[get_and_update_database]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        #self.print_scene()
+        if self.resolve('scene'):
+            log.info("[resolve_scene]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        if self.resolve('database'):
+            log.info("[resolve_database]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        self.contexts[''] = self.contexts['database']
+        if self.resolve(''):
+            log.info("[resolve_global]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        del self.contexts['']
+        if self.remove():
+            log.info("[remove]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        #self.print_scene()
+        #TODO: test save/load, concurrent access, BT execution
+
+if __name__ == '__main__':
+    tester = WorldModelTester()
+    tester.run()
