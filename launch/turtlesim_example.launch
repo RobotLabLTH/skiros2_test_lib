@@ -2,13 +2,14 @@
   <arg name="primitive_list" default="[turtle_find, target_follow, wander_around, wander_around_2, wait, turtle_spawn]"/>
   <arg name="skill_list" default="[patrol_and_follow, stay_still_and_follow, turtle_spawn_and_follow, turtle_spawn_and_wander]"/>
   <arg name="debug" default="false"/>
+  <arg name="gui" default="true"/>
 
   <node name="turtlesim" pkg="turtlesim" type="turtlesim_node" />
 
   <include file="$(find skiros2)/launch/world_model_server.launch">
       <arg name="init_scene" value=""/>
       <arg name="verbose" value="false"/>
-      <arg name="gui" value="true"/>
+      <arg name="gui" value="$(arg gui)"/>
       <arg name="reasoners_pkgs" value="[skiros2_std_reasoners]"/>
       <arg name="workspace_dir" value="$(find skiros2_test_lib)/owl"/>
       <arg name="debug" value="$(arg debug)"/>
