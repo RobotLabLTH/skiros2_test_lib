@@ -96,6 +96,7 @@ class pick_and_place(SkillBase):
         self.setDescription(FollowPose(), self.__class__.__name__)
 
     def expand(self, skill):
+        skill.setProcessor(Sequential())
 
         sequential_node1 = self.getNode(Sequential())
         skill.addChild(sequential_node1)
@@ -123,7 +124,7 @@ class pick_and_place(SkillBase):
         pose_generator3.specifyParamDefault("y", 2.)
         pose_generator3.specifyParamDefault("z", 2.)
 
-        parallel_node1 = self.getNode(ParallelFf())
+        parallel_node1 = self.getNode(ParallelFs())
         skill.addChild(parallel_node1)
 
         pose_circle_mover = self.getSkill(":PoseMover", "pose_circle_mover")
