@@ -2,6 +2,7 @@
   <arg name="primitive_list" default="[turtle_find, target_follow, wander_around, wander_around_2, wait, turtle_spawn]"/>
   <arg name="skill_list" default="[patrol_and_follow, stay_still_and_follow, turtle_spawn_and_follow, turtle_spawn_and_wander]"/>
   <arg name="debug" default="false"/>
+  <arg name="deploy" default="true"/>
 
   <node name="turtlesim" pkg="turtlesim" type="turtlesim_node" />
 
@@ -12,6 +13,7 @@
       <arg name="reasoners_pkgs" value="[skiros2_std_reasoners]"/>
       <arg name="workspace_dir" value="$(find skiros2_test_lib)/owl"/>
       <arg name="debug" value="$(arg debug)"/>
+      <arg name="deploy" value="$(arg deploy)"/>
   </include>
 
   <include file="$(find skiros2)/launch/skill_mgr.launch">
@@ -22,5 +24,6 @@
       <arg name="skill_list" value="$(arg skill_list)" />
       <arg name="robot_ontology_prefix" value="tts"/>
       <arg name="robot_name" value="tts_robot"/>
+      <arg name="deploy" value="$(arg deploy)"/>
   </include>
 </launch>
