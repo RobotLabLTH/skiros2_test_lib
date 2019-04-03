@@ -28,7 +28,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, State
+from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, State, ParallelFf, Sequential
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.params import ParamTypes
 
@@ -76,7 +76,7 @@ class test_primitive(PrimitiveBase):
         return self.step("")
 
 
-class test_skill(SkillBase):
+class test_skill_sequence(SkillBase):
     """
     Tree is:
     ----->: ()
@@ -88,7 +88,27 @@ class test_skill(SkillBase):
         self.setDescription(TestSkill(), self.__class__.__name__)
 
     def expand(self, skill):
-        skill.addChild(self.getSkill(":TestPrimitive", ""))
-        #skill.last().specifyParamDefault("Force", 0.0)
-        skill.addChild(self.getSkill(":TestPrimitive", ""))
-        skill.last().specifyParamDefault("Force", 1.0)
+        skill.setProcessor(Sequential())
+        skill(
+            self.skill(":TestPrimitive", ""),
+            self.skill(":TestPrimitive", "", specify={"Force": 1.0})
+        )
+
+class test_skill_parallel(SkillBase):
+    """
+    Tree is:
+    ----->: ()
+    ------->:
+    ------->:
+
+    """
+    def createDescription(self):
+        self.setDescription(TestSkill(), self.__class__.__name__)
+
+    def expand(self, skill):
+        skill.setProcessor(ParallelFf())
+        skill(
+            self.skill(":TestPrimitive", "test_primitive"),
+            self.skill(":TestPrimitive", "test_primitive", specify={"Force": 1.0}),
+            self.skill(":TestPrimitive", "", specify={"Force": 2.0})
+        )

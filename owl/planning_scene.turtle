@@ -1,0 +1,576 @@
+@prefix : <> .
+@prefix SUMO: <http://www.semanticweb.org/ontologies/2013/7/RobotsAutomation.owl#SUMO:> .
+@prefix cora: <http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#> .
+@prefix coraX: <http://www.inf.ufrgs.br/phi-group/ontologies/coraX#> .
+@prefix coraX1: <http://www.inf.ufrgs.br/phi-group/ontologies/coraX.owl#> .
+@prefix corax: <http://www.inf.ufrgs.br/phi-group/ontologies/coraX.owl#> .
+@prefix default1: <> .
+@prefix default11: <> .
+@prefix default2: <> .
+@prefix default21: <> .
+@prefix default3: <> .
+@prefix default31: <> .
+@prefix default4: <> .
+@prefix default41: <> .
+@prefix default5: <> .
+@prefix default51: <> .
+@prefix default6: <> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix owl2xml: <http://www.w3.org/2006/12/owl2-xml#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rparts: <http://www.inf.ufrgs.br/phi-group/ontologies/RParts.owl#> .
+@prefix skiros: <http://rvmi.aau.dk/ontologies/skiros.owl#> .
+@prefix sumo: <http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#> .
+@prefix tts: <http://rvmi.aau.dk/ontologies/tts.owl#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+skiros:Scene-0 a skiros:Scene,
+        owl:NamedIndividual ;
+    rdfs:label "" ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "map"^^xsd:string ;
+    skiros:OrientationW "1.0"^^xsd:float ;
+    skiros:OrientationX "0.0"^^xsd:float ;
+    skiros:OrientationY "0.0"^^xsd:float ;
+    skiros:OrientationZ "0.0"^^xsd:float ;
+    skiros:PositionX "0.0"^^xsd:float ;
+    skiros:PositionY "0.0"^^xsd:float ;
+    skiros:PositionZ "0.0"^^xsd:float ;
+    skiros:contain skiros:LargeBox-51,
+        skiros:LargeBox-80,
+        skiros:Location-5,
+        cora:Robot-1 .
+
+skiros:AbstractConditionRelation-104 a skiros:AbstractConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "ContainerForObject" ;
+    skiros:appliedOnType "skiros:partReference"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "Container"^^xsd:string .
+
+skiros:ConditionGenerate-105 a skiros:ConditionGenerate,
+        owl:NamedIndividual ;
+    rdfs:label "HasObject" ;
+    skiros:desiredState true ;
+    skiros:hasSubject "Object"^^xsd:string .
+
+skiros:ConditionGenerate-125 a skiros:ConditionGenerate,
+        owl:NamedIndividual ;
+    rdfs:label "HasObject" ;
+    skiros:desiredState true ;
+    skiros:hasSubject "Object"^^xsd:string .
+
+skiros:ConditionHasProperty-108 a skiros:ConditionHasProperty,
+        owl:NamedIndividual ;
+    rdfs:label "HasPosition" ;
+    skiros:appliedOnType "skiros:Position"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasSubject "Object"^^xsd:string .
+
+skiros:ConditionProperty-102 a skiros:ConditionProperty,
+        owl:NamedIndividual ;
+    rdfs:label "CameraIdle" ;
+    skiros:appliedOnType "skiros:StateProperty"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:desiredValue "Idle"^^xsd:string ;
+    skiros:hasSubject "Camera"^^xsd:string ;
+    skiros:operator "="^^xsd:string .
+
+skiros:ConditionProperty-106 a skiros:ConditionProperty,
+        owl:NamedIndividual ;
+    rdfs:label "CameraIdle" ;
+    skiros:appliedOnType "skiros:StateProperty"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:desiredValue "Idle"^^xsd:string ;
+    skiros:hasSubject "Camera"^^xsd:string ;
+    skiros:operator "="^^xsd:string .
+
+skiros:ConditionProperty-122 a skiros:ConditionProperty,
+        owl:NamedIndividual ;
+    rdfs:label "EmptyHanded" ;
+    skiros:appliedOnType "skiros:ContainerState"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:desiredValue "Empty"^^xsd:string ;
+    skiros:hasSubject "Gripper"^^xsd:string ;
+    skiros:operator "="^^xsd:string .
+
+skiros:ConditionProperty-126 a skiros:ConditionProperty,
+        owl:NamedIndividual ;
+    rdfs:label "EmptyHanded" ;
+    skiros:appliedOnType "skiros:ContainerState"^^xsd:string ;
+    skiros:desiredState false ;
+    skiros:desiredValue "Empty"^^xsd:string ;
+    skiros:hasSubject "Gripper"^^xsd:string ;
+    skiros:operator "="^^xsd:string .
+
+skiros:ConditionProperty-138 a skiros:ConditionProperty,
+        owl:NamedIndividual ;
+    rdfs:label "EmptyHanded" ;
+    skiros:appliedOnType "skiros:ContainerState"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:desiredValue "Empty"^^xsd:string ;
+    skiros:hasSubject "Gripper"^^xsd:string ;
+    skiros:operator "="^^xsd:string .
+
+skiros:ConditionRelation-103 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "RobotAt" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Container"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-107 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "InContainer" ;
+    skiros:appliedOnType "skiros:contain"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "Container"^^xsd:string .
+
+skiros:ConditionRelation-113 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "RobotAt" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "StartLocation"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-114 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "NoRobotAt" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState false ;
+    skiros:hasObject "StartLocation"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-115 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "RobotAt" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "TargetLocation"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-123 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "RobotAtLocation" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Container"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-124 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "ObjectInContainer" ;
+    skiros:appliedOnType "skiros:contain"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "Container"^^xsd:string .
+
+skiros:ConditionRelation-127 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "RobotAtLocation" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Container"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-128 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "Holding" ;
+    skiros:appliedOnType "skiros:contain"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "Gripper"^^xsd:string .
+
+skiros:ConditionRelation-135 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "RobotAt" ;
+    skiros:appliedOnType "skiros:at"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "PlacingLocation"^^xsd:string ;
+    skiros:hasSubject "Robot"^^xsd:string .
+
+skiros:ConditionRelation-136 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "Holding" ;
+    skiros:appliedOnType "skiros:contain"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "Gripper"^^xsd:string .
+
+skiros:ConditionRelation-137 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "NotHolding" ;
+    skiros:appliedOnType "skiros:contain"^^xsd:string ;
+    skiros:desiredState false ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "Gripper"^^xsd:string .
+
+skiros:ConditionRelation-139 a skiros:ConditionRelation,
+        owl:NamedIndividual ;
+    rdfs:label "InPlace" ;
+    skiros:appliedOnType "skiros:contain"^^xsd:string ;
+    skiros:desiredState true ;
+    skiros:hasObject "Object"^^xsd:string ;
+    skiros:hasSubject "PlacingLocation"^^xsd:string .
+
+skiros:DepthCamera-144 a skiros:DepthCamera,
+        owl:NamedIndividual ;
+    rdfs:label "skiros:test_camera" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:DepthCamera-144"^^xsd:string ;
+    skiros:LinkedToFrameId ""^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:StateProperty "Idle"^^xsd:string ;
+    skiros:Template "skiros:test_camera"^^xsd:string ;
+    skiros:hasTemplate skiros:test_camera .
+
+skiros:DepthCamera-4 a skiros:DepthCamera,
+        owl:NamedIndividual ;
+    rdfs:label "skiros:test_camera" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:DepthCamera-4"^^xsd:string ;
+    skiros:LinkedToFrameId ""^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:StateProperty "Idle"^^xsd:string ;
+    skiros:Template "skiros:test_camera"^^xsd:string ;
+    skiros:hasTemplate skiros:test_camera .
+
+skiros:Drive a owl:class ;
+    rdfs:subClassOf skiros:Skill .
+
+skiros:Drive-109 a skiros:Drive,
+        owl:NamedIndividual ;
+    rdfs:label "drive_fake" ;
+    skiros:hasParam skiros:Parameter-110,
+        skiros:Parameter-111,
+        skiros:Parameter-112 ;
+    skiros:hasPostCondition skiros:ConditionRelation-114,
+        skiros:ConditionRelation-115 ;
+    skiros:hasPreCondition skiros:ConditionRelation-113 .
+
+skiros:LargeBox-51 a skiros:LargeBox,
+        owl:NamedIndividual ;
+    rdfs:label "start_box" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:LargeBox-51"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:large_box_test_starter"^^xsd:string ;
+    skiros:contain skiros:Starter-145,
+        skiros:Starter-52 ;
+    skiros:hasTemplate skiros:large_box_test_starter .
+
+skiros:LargeBox-80 a skiros:LargeBox,
+        owl:NamedIndividual ;
+    rdfs:label "target_box" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:LargeBox-80"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:large_box_test_starter"^^xsd:string ;
+    skiros:hasTemplate skiros:large_box_test_starter .
+
+skiros:Locate a owl:class ;
+    rdfs:subClassOf skiros:Skill .
+
+skiros:Locate-97 a skiros:Locate,
+        owl:NamedIndividual ;
+    rdfs:label "locate_fake" ;
+    skiros:hasParam skiros:Parameter-100,
+        skiros:Parameter-101,
+        skiros:Parameter-98,
+        skiros:Parameter-99 ;
+    skiros:hasPostCondition skiros:ConditionGenerate-105,
+        skiros:ConditionHasProperty-108,
+        skiros:ConditionProperty-106,
+        skiros:ConditionRelation-107 ;
+    skiros:hasPreCondition skiros:AbstractConditionRelation-104,
+        skiros:ConditionProperty-102,
+        skiros:ConditionRelation-103 .
+
+skiros:Parameter-100 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Robot" ;
+    skiros:DataType "sumo:Agent"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-101 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Camera" ;
+    skiros:DataType "skiros:Camera"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-110 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "TargetLocation" ;
+    skiros:DataType "skiros:Location"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-111 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "StartLocation" ;
+    skiros:DataType "skiros:Location"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-112 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Robot" ;
+    skiros:DataType "sumo:Agent"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-117 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Object" ;
+    skiros:DataType "skiros:Product"^^xsd:string ;
+    skiros:ParameterType 1 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-118 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Container" ;
+    skiros:DataType "skiros:Location"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-119 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Arm" ;
+    skiros:DataType "rparts:ArmDevice"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-120 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Gripper" ;
+    skiros:DataType "rparts:GripperEffector"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-121 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Robot" ;
+    skiros:DataType "sumo:Agent"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-130 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "PlacingLocation" ;
+    skiros:DataType "skiros:Location"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-131 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Object" ;
+    skiros:DataType "skiros:Product"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-132 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Arm" ;
+    skiros:DataType "rparts:ArmDevice"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-133 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Gripper" ;
+    skiros:DataType "rparts:GripperEffector"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-134 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Robot" ;
+    skiros:DataType "sumo:Agent"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-141 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Robot" ;
+    skiros:DataType "sumo:Agent"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-98 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Object" ;
+    skiros:DataType "skiros:Product"^^xsd:string ;
+    skiros:ParameterType 1 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Parameter-99 a skiros:Parameter,
+        owl:NamedIndividual ;
+    rdfs:label "Container" ;
+    skiros:DataType "skiros:Location"^^xsd:string ;
+    skiros:ParameterType 0 ;
+    rdfs:comment ""^^xsd:string .
+
+skiros:Pick a owl:class ;
+    rdfs:subClassOf skiros:Skill .
+
+skiros:Pick-116 a skiros:Pick,
+        owl:NamedIndividual ;
+    rdfs:label "pick_fake" ;
+    skiros:hasParam skiros:Parameter-117,
+        skiros:Parameter-118,
+        skiros:Parameter-119,
+        skiros:Parameter-120,
+        skiros:Parameter-121 ;
+    skiros:hasPostCondition skiros:ConditionGenerate-125,
+        skiros:ConditionProperty-126,
+        skiros:ConditionRelation-127,
+        skiros:ConditionRelation-128 ;
+    skiros:hasPreCondition skiros:ConditionProperty-122,
+        skiros:ConditionRelation-123,
+        skiros:ConditionRelation-124 .
+
+skiros:Place a owl:class ;
+    rdfs:subClassOf skiros:Skill .
+
+skiros:Place-129 a skiros:Place,
+        owl:NamedIndividual ;
+    rdfs:label "place_fake" ;
+    skiros:hasParam skiros:Parameter-130,
+        skiros:Parameter-131,
+        skiros:Parameter-132,
+        skiros:Parameter-133,
+        skiros:Parameter-134 ;
+    skiros:hasPostCondition skiros:ConditionProperty-138,
+        skiros:ConditionRelation-137,
+        skiros:ConditionRelation-139 ;
+    skiros:hasPreCondition skiros:ConditionRelation-135,
+        skiros:ConditionRelation-136 .
+
+skiros:Starter-145 a skiros:Starter,
+        owl:NamedIndividual ;
+    rdfs:label "starter2" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:Starter-145"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:starter"^^xsd:string ;
+    skiros:Weight "3.0"^^xsd:float ;
+    skiros:hasTemplate skiros:starter .
+
+skiros:Starter-52 a skiros:Starter,
+        owl:NamedIndividual ;
+    rdfs:label "starter1" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:Starter-52"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:starter"^^xsd:string ;
+    skiros:Weight "3.0"^^xsd:float ;
+    skiros:hasTemplate skiros:starter .
+
+skiros:TaskPlan a owl:class ;
+    rdfs:subClassOf skiros:Skill .
+
+skiros:TaskPlan-140 a skiros:TaskPlan,
+        owl:NamedIndividual ;
+    rdfs:label "task_plan" ;
+    skiros:hasParam skiros:Parameter-141 .
+
+rparts:ArmDevice-142 a rparts:ArmDevice,
+        owl:NamedIndividual ;
+    rdfs:label "arm2" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "rparts:ArmDevice-142"^^xsd:string ;
+    skiros:LinkedToFrameId ""^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:test_arm"^^xsd:string ;
+    skiros:hasA skiros:DepthCamera-144,
+        rparts:GripperEffector-143 ;
+    skiros:hasTemplate skiros:test_arm .
+
+rparts:ArmDevice-2 a rparts:ArmDevice,
+        owl:NamedIndividual ;
+    rdfs:label "arm1" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "rparts:ArmDevice-2"^^xsd:string ;
+    skiros:LinkedToFrameId ""^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:test_arm"^^xsd:string ;
+    skiros:hasA skiros:DepthCamera-4,
+        rparts:GripperEffector-3 ;
+    skiros:hasTemplate skiros:test_arm .
+
+rparts:GripperEffector-143 a rparts:GripperEffector,
+        owl:NamedIndividual ;
+    rdfs:label "gripper2" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:ContainerState "Empty"^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "rparts:GripperEffector-143"^^xsd:string ;
+    skiros:LinkedToFrameId ""^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:test_gripper"^^xsd:string ;
+    skiros:hasTemplate skiros:test_gripper .
+
+rparts:GripperEffector-3 a rparts:GripperEffector,
+        owl:NamedIndividual ;
+    rdfs:label "gripper1" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:ContainerState "Empty"^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "rparts:GripperEffector-3"^^xsd:string ;
+    skiros:LinkedToFrameId ""^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:test_gripper"^^xsd:string ;
+    skiros:hasTemplate skiros:test_gripper .
+
+cora:Robot-1 a cora:Robot,
+        owl:NamedIndividual ;
+    rdfs:label "robot" ;
+    skiros:BaseFrameId "map"^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "cora:Robot-1"^^xsd:string ;
+    skiros:OrientationW "1.0"^^xsd:float ;
+    skiros:OrientationX "0.0"^^xsd:float ;
+    skiros:OrientationY "0.0"^^xsd:float ;
+    skiros:OrientationZ "0.0"^^xsd:float ;
+    skiros:PositionX "0.0"^^xsd:float ;
+    skiros:PositionY "0.0"^^xsd:float ;
+    skiros:PositionZ "0.0"^^xsd:float ;
+    skiros:PublishTf true ;
+    skiros:SkillMgr "test_robot"^^xsd:string ;
+    skiros:Template ":test_robot"^^xsd:string ;
+    skiros:at skiros:Location-5 ;
+    skiros:contain rparts:ArmDevice-142 ;
+    skiros:hasA rparts:ArmDevice-2 ;
+    skiros:hasSkill skiros:Drive-109,
+        skiros:Locate-97,
+        skiros:Pick-116,
+        skiros:Place-129,
+        skiros:TaskPlan-140 ;
+    skiros:hasTemplate skiros:test_robot .
+
+skiros:Location-5 a skiros:Location,
+        owl:NamedIndividual ;
+    rdfs:label "skiros:unknown_location" ;
+    skiros:BaseFrameId ""^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:Location-5"^^xsd:string ;
+    skiros:PublishTf true ;
+    skiros:Template "skiros:unknown_location"^^xsd:string ;
+    skiros:hasTemplate skiros:unknown_location .
+
