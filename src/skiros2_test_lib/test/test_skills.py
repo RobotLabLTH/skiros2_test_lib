@@ -36,11 +36,13 @@ from skiros2_common.core.params import ParamTypes
 # Description
 #################################################################################
 
+
 class TestPrimitive(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Force", 0.0, ParamTypes.Required)
         #=======PreConditions=========
+
 
 class TestSkill(SkillDescription):
     def createDescription(self):
@@ -84,6 +86,7 @@ class test_skill_sequence(SkillBase):
     ------->:
 
     """
+
     def createDescription(self):
         self.setDescription(TestSkill(), self.__class__.__name__)
 
@@ -94,6 +97,7 @@ class test_skill_sequence(SkillBase):
             self.skill(":TestPrimitive", "", specify={"Force": 1.0})
         )
 
+
 class test_skill_parallel(SkillBase):
     """
     Tree is:
@@ -102,6 +106,7 @@ class test_skill_parallel(SkillBase):
     ------->:
 
     """
+
     def createDescription(self):
         self.setDescription(TestSkill(), self.__class__.__name__)
 

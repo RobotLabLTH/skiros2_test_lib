@@ -7,12 +7,14 @@ import rospy
 import Queue
 from actionlib.msg import TestAction, TestGoal
 
+
 class ActionSkillDescription(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("InputParam", 0, ParamTypes.Required)
         self.addParam("OutputParam", 0, ParamTypes.Optional)
         #=======PreConditions=========
+
 
 class DriveDescription(SkillDescription):
     def createDescription(self):
@@ -21,12 +23,14 @@ class DriveDescription(SkillDescription):
         self.addParam("Target", '', ParamTypes.Required)
         #=======PreConditions=========
 
+
 class PrimitiveActionClient(PrimitiveBase):
     """
     @brief Base class for skills based on a action server.
 
     See test_action_skill for a practical example
     """
+
     def onPreempt(self):
         """
         @brief Cancel all goals
@@ -40,13 +44,13 @@ class PrimitiveActionClient(PrimitiveBase):
         self.client = self.buildClient()
         if not self.client.wait_for_server(rospy.Duration(0.1)):
             return self.startError("Action server is not available.", -1)
-        self.client.send_goal(self.buildGoal(), done_cb= self._doneCb, feedback_cb = self._feedbackCb)
+        self.client.send_goal(self.buildGoal(), done_cb=self._doneCb, feedback_cb=self._feedbackCb)
         return True
 
     def execute(self):
         if not self.q.empty():
             msg = self.q.get(False)
-            if self._done != None:
+            if self._done is not None:
                 return self.onDone(self._done, msg)
             else:
                 return self.onFeedback(msg)
@@ -79,7 +83,7 @@ class PrimitiveActionClient(PrimitiveBase):
         @brief To override. Called every time a new feedback msg is received.
         @return Can return self.success, self.fail or self.step
         """
-        #Do something with feedback msg
+        # Do something with feedback msg
         return self.step("")
 
     def onDone(self, state, msg):
@@ -87,8 +91,9 @@ class PrimitiveActionClient(PrimitiveBase):
         @brief To override. Called when goal is achieved.
         @return self.success or self.fail
         """
-        #Do something with result msg
+        # Do something with result msg
         return self.success("Finished. State: {} Result: {}".format(state, msg))
+
 
 class test_action_skill(PrimitiveActionClient):
     """
@@ -96,6 +101,7 @@ class test_action_skill(PrimitiveActionClient):
 
     Goal and feeback is just an integer
     """
+
     def createDescription(self):
         self.setDescription(ActionSkillDescription(), self.__class__.__name__)
 
@@ -109,10 +115,12 @@ class test_action_skill(PrimitiveActionClient):
         self.params["OutputParam"].value = msg.feedback
         return self.step("{}".format(self.params["OutputParam"].value))
 
+
 class drive_skill(PrimitiveActionClient):
     """
     A skill based on a action server implementation
     """
+
     def createDescription(self):
         self.setDescription(DriveDescription(), self.__class__.__name__)
 
@@ -131,5 +139,5 @@ class drive_skill(PrimitiveActionClient):
         return self.actionGoal(target)
 
     def onFeedback(self, msg):
-        #Do something with feedback msg
+        # Do something with feedback msg
         return self.step("{}".format(self.params["OutputParam"].value))

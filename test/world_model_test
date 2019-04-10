@@ -6,6 +6,7 @@ from skiros2_common.core.world_element import Element
 import skiros2_common.tools.logger as log
 import unittest
 
+
 class WorldModelTester(unittest.TestCase):
     def __init__(self):
         rospy.init_node("wm_tester")
@@ -17,7 +18,7 @@ class WorldModelTester(unittest.TestCase):
         self.location = None
 
     def assert_equal(self, first, second, label):
-        if first!=second:
+        if first != second:
             log.error(label, "Got: {} expected: {}".format(first, second))
             return False
         return True
@@ -59,7 +60,7 @@ class WorldModelTester(unittest.TestCase):
         e = d[name]
         print "{}->{}".format(indentation, e.printState())
         for r in e.getRelations(subj="-1", pred=self.wmi.get_sub_properties("skiros:spatiallyRelated")):
-            self._print_recursive(r['dst'], d, indentation+"--")
+            self._print_recursive(r['dst'], d, indentation + "--")
 
     def print_scene(self):
         (scene, scene_id) = self.wmi.get_scene()
@@ -69,28 +70,29 @@ class WorldModelTester(unittest.TestCase):
         self._print_recursive("skiros:Scene-0", utility_dict)
 
     def run(self):
-        log.assertInfo(self.query(), "[query]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+        log.assertInfo(self.query(), "[query]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         if self.add('scene'):
-            log.info("[add_element_scene]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+            log.info("[add_element_scene]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         if self.add('database'):
-            log.info("[add_element_database]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+            log.info("[add_element_database]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         if self.get_and_update('scene'):
-            log.info("[get_and_update_scene]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+            log.info("[get_and_update_scene]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         if self.get_and_update('database'):
-            log.info("[get_and_update_database]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
-        #self.print_scene()
+            log.info("[get_and_update_database]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
+        # self.print_scene()
         if self.resolve('scene'):
-            log.info("[resolve_scene]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+            log.info("[resolve_scene]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         if self.resolve('database'):
-            log.info("[resolve_database]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+            log.info("[resolve_database]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         self.contexts[''] = self.contexts['database']
         if self.resolve(''):
-            log.info("[resolve_global]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
+            log.info("[resolve_global]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
         del self.contexts['']
         if self.remove():
-            log.info("[remove]", log.logColor.GREEN + log.logColor.BOLD  + "OK.")
-        #self.print_scene()
-        #TODO: test save/load, concurrent access, BT execution
+            log.info("[remove]", log.logColor.GREEN + log.logColor.BOLD + "OK.")
+        # self.print_scene()
+        # TODO: test save/load, concurrent access, BT execution
+
 
 if __name__ == '__main__':
     tester = WorldModelTester()

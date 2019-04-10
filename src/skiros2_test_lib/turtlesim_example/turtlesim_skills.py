@@ -36,10 +36,12 @@ from skiros2_common.core.world_element import Element
 # Description
 #################################################################################
 
+
 class TurtleFindAndFollow(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Turtle", Element("sumo:Object"), ParamTypes.Optional)
+
 
 class TurtleSpawnAndFollow(SkillDescription):
     def createDescription(self):
@@ -48,6 +50,7 @@ class TurtleSpawnAndFollow(SkillDescription):
         self.addParam("PosY", int, ParamTypes.Required)
         self.addParam("Rotation", int, ParamTypes.Required)
         self.addParam("Name", str, ParamTypes.Required)
+
 
 class TurtleSpawnAndWander(SkillDescription):
     def createDescription(self):
@@ -60,6 +63,7 @@ class TurtleSpawnAndWander(SkillDescription):
 # Implementation
 #################################################################################
 
+
 class patrol_and_follow(SkillBase):
     """
     Tree is:
@@ -68,6 +72,7 @@ class patrol_and_follow(SkillBase):
     ------->:TrajectoryConsumer
 
     """
+
     def createDescription(self):
         self.setDescription(TurtleFindAndFollow(), self.__class__.__name__)
 
@@ -79,6 +84,7 @@ class patrol_and_follow(SkillBase):
         skill.last().last().remap('Target', 'Turtle')
         skill.addChild(self.getSkill(":Wander", ""))
 
+
 class stay_still_and_follow(SkillBase):
     """
     Tree is:
@@ -87,6 +93,7 @@ class stay_still_and_follow(SkillBase):
     ------->:TrajectoryConsumer
 
     """
+
     def createDescription(self):
         self.setDescription(TurtleFindAndFollow(), self.__class__.__name__)
 
@@ -102,6 +109,7 @@ class stay_still_and_follow(SkillBase):
 class turtle_spawn_and_follow(SkillBase):
     """
     """
+
     def createDescription(self):
         self.setDescription(TurtleSpawnAndFollow(), self.__class__.__name__)
 
@@ -116,6 +124,7 @@ class turtle_spawn_and_follow(SkillBase):
 class turtle_spawn_and_wander(SkillBase):
     """
     """
+
     def createDescription(self):
         self.setDescription(TurtleSpawnAndWander(), self.__class__.__name__)
 

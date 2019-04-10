@@ -32,17 +32,20 @@ from skiros2_skill.core.skill import SkillDescription, ParamOptions
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 from skiros2_common.core.primitive import PrimitiveBase
-import threading, Queue
+import threading
+import Queue
 
 #################################################################################
 # Descriptions
 #################################################################################
+
 
 class TrajectoryGenerator(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("Trajectory", dict, ParamTypes.Optional)
         self.addParam("Shutdown", False, ParamTypes.Optional)
+
 
 class TrajectoryConsumer(SkillDescription):
     def createDescription(self):
@@ -54,8 +57,10 @@ class TrajectoryConsumer(SkillDescription):
 # Implementations
 #################################################################################
 
+
 import random
 import time
+
 
 class trajectory_generator(PrimitiveBase):
     """
@@ -96,12 +101,14 @@ class trajectory_generator(PrimitiveBase):
             return self.step("Added trajectory: {}".format(self.params["Trajectory"].getValues()))
         return self.step("")
 
+
 class trajectory_consumer(PrimitiveBase):
     """
     This primitive consumes one value in "trajectories" at each tick
 
     It continues to run until the variable Shutdown is set to True
     """
+
     def createDescription(self):
         self.setDescription(TrajectoryConsumer(), self.__class__.__name__)
 

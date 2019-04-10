@@ -44,6 +44,7 @@ from skiros2_common.core.primitive import PrimitiveBase
 import skiros2_test_lib.test as ts
 import rospy
 
+
 def testVisitors():
     rospy.init_node("skill_mgr", anonymous=False)
     sm = SkillManager("test_robot")
@@ -61,6 +62,7 @@ def testVisitors():
         uid = sm.addTask([s])
         sm.executeTask(uid, track_params=track_params)
         sm._tasks.join(uid)
+
 
 if __name__ == '__main__':
     print("========= TEST WITH DOCTEST ===========")

@@ -46,10 +46,11 @@ class Locate(SkillDescription):
         self.addParam("Camera", Element("skiros:Camera"), ParamTypes.Required, [ParamOptions.Lock])
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Container", True))
-        self.addPreCondition(self.getAbstractRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True));
+        self.addPreCondition(self.getAbstractRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True))
         #=======PostConditions=========
-        self.addPostCondition(self.getRelationCond("InContainer", "skiros:contain", "Container", "Object", True));
+        self.addPostCondition(self.getRelationCond("InContainer", "skiros:contain", "Container", "Object", True))
         self.addPostCondition(self.getHasPropCond("HasPosition", "skiros:Position", "Object", True))
+
 
 class Drive(SkillDescription):
     def createDescription(self):
@@ -62,6 +63,7 @@ class Drive(SkillDescription):
         self.addPostCondition(self.getRelationCond("NoRobotAt", "skiros:at", "Robot", "StartLocation", False))
         self.addPostCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "TargetLocation", True))
 
+
 class Pick(SkillDescription):
     def createDescription(self):
         #=======Params=========
@@ -72,11 +74,12 @@ class Pick(SkillDescription):
         #=======PreConditions=========
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
-        self.addPreCondition(self.getRelationCond("ObjectInContainer", "skiros:contain", "Container", "Object", True));
+        self.addPreCondition(self.getRelationCond("ObjectInContainer", "skiros:contain", "Container", "Object", True))
         #=======PostConditions=========
         self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", False))
         self.addPostCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
         self.addPostCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True))
+
 
 class Place(SkillDescription):
     def createDescription(self):
@@ -88,13 +91,13 @@ class Place(SkillDescription):
         #=======PreConditions=========
 
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "PlacingLocation", True))
-        self.addPreCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True));
+        self.addPreCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True))
         #self.addPreCondition(self.getPropCond("LocationEmpty", ":ContainerState", "PlacingLocation", "=", "Empty", True));
         #=======PostConditions=========
-        self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False));
+        self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False))
         #self.addPostCondition(self.getPropCond("LocationEmpty", ":ContainerState", "PlacingLocation", "=", "Empty", False));
-        self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True));
-        self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True));
+        self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
+        self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True))
 
 #################################################################################
 # Implementation
@@ -105,40 +108,45 @@ class locate_fake(SkillBase):
     """
 
     """
+
     def createDescription(self):
         self.setDescription(Locate(), self.__class__.__name__)
 
     def expand(self, skill):
         pass
 
+
 class drive_fake(SkillBase):
     """
 
     """
+
     def createDescription(self):
         self.setDescription(Drive(), self.__class__.__name__)
 
     def expand(self, skill):
         pass
 
+
 class pick_fake(SkillBase):
     """
 
     """
+
     def createDescription(self):
         self.setDescription(Pick(), self.__class__.__name__)
 
     def expand(self, skill):
         pass
 
+
 class place_fake(SkillBase):
     """
 
     """
+
     def createDescription(self):
         self.setDescription(Place(), self.__class__.__name__)
 
     def expand(self, skill):
         pass
-
-

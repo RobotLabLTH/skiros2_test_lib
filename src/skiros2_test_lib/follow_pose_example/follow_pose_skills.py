@@ -45,6 +45,7 @@ class FollowPose(SkillDescription):
         self.addParam("Pose", Element("skiros:TransformationPose"), ParamTypes.Optional)
         self.addParam("Pose2", Element("skiros:TransformationPose"), ParamTypes.Optional)
 
+
 class PickAndPlace(SkillDescription):
     def createDescription(self):
         #=======Params=========
@@ -53,6 +54,7 @@ class PickAndPlace(SkillDescription):
 #################################################################################
 # Implementation
 #################################################################################
+
 
 class follow_pose(SkillBase):
     """
@@ -63,6 +65,7 @@ class follow_pose(SkillBase):
     ------->:PoseFollower
 
     """
+
     def createDescription(self):
         self.setDescription(FollowPose(), self.__class__.__name__)
 
@@ -92,6 +95,7 @@ class pick_and_place(SkillBase):
     --------->:PoseFollower, "pose_follower_one_axis"
     --------->:PoseFollower, "pose_follower_three_axis"
     """
+
     def createDescription(self):
         self.setDescription(FollowPose(), self.__class__.__name__)
 
@@ -101,14 +105,14 @@ class pick_and_place(SkillBase):
         sequential_node1 = self.getNode(Sequential())
         skill.addChild(sequential_node1)
 
-        #the pose that is going to move in circle (aka the first target)
+        # the pose that is going to move in circle (aka the first target)
         pose_generator1 = self.getSkill(":PoseGenerator", "")
         sequential_node1.addChild(pose_generator1)
         pose_generator1.specifyParamDefault("x", 1.)
         pose_generator1.specifyParamDefault("y", 0.)
         pose_generator1.specifyParamDefault("z", 0.)
 
-        #the pose that represents the robot
+        # the pose that represents the robot
         pose_generator2 = self.getSkill(":PoseGenerator", "")
         sequential_node1.addChild(pose_generator2)
         pose_generator2.remap("Pose", "Pose2")
@@ -116,7 +120,7 @@ class pick_and_place(SkillBase):
         pose_generator2.specifyParamDefault("y", 1.)
         pose_generator2.specifyParamDefault("z", 1.)
 
-        #the pose that represents the home (aka the second target)
+        # the pose that represents the home (aka the second target)
         pose_generator3 = self.getSkill(":PoseGenerator", "")
         sequential_node1.addChild(pose_generator3)
         pose_generator3.remap("Pose", "Pose3")

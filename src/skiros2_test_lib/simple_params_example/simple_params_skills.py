@@ -49,6 +49,7 @@ class TrajectoryCoordinator(SkillDescription):
 # Implementation
 #################################################################################
 
+
 class trajectory_coordinator(SkillBase):
     """
     Tree is:
@@ -57,6 +58,7 @@ class trajectory_coordinator(SkillBase):
     ------->:TrajectoryConsumer
 
     """
+
     def createDescription(self):
         self.setDescription(TrajectoryCoordinator(), self.__class__.__name__)
 
@@ -64,4 +66,3 @@ class trajectory_coordinator(SkillBase):
         skill.setProcessor(ParallelFf())
         skill.addChild(self.getSkill(":TrajectoryGenerator", ""))
         skill.addChild(self.getSkill(":TrajectoryConsumer", ""))
-
