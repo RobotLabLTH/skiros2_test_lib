@@ -1,4 +1,5 @@
 <launch>
+  <!-- To test the planning, try the goal: (skiros:contain skiros:LargeBox-80 skiros:Starter-145) -->
   <arg name="deploy" default="false" />
   <include file="$(find skiros2_test_lib)/launch/main.launch">
     <arg name="init_scene" value="planning_scene.turtle"/>
