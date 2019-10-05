@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+import rospy
+import threading
+from skiros2_skill.ros.skill_layer_interface import SkillLayerInterface
+
+class TestSkiros2Skill:
+    def __init__(self):
+        rospy.init_node('testing_node')
+        self.sli = SkillLayerInterface()
+        while not self.sli.has_changes and not rospy.is_shutdown():
+            rospy.sleep(1.0)
+        self.event = threading.Event()
+
+    def setUp(self, skill_to_test):
+        self.skill_to_test = skill_to_test
+        self.sli.set_monitor_cb(self._monitor_cb)
+
+    def tearDown(self):
+        self.sli.set_monitor_cb(None)
+        self.event.clear()
+        self.new_message = None
+
+    def _monitor_cb(self, message):
+        self.new_message = message
+        self.event.set()
+
+    def test_1(self):
+        agent0 = self.sli.agents.values()[0]
+        agent0skills = agent0.skills #Get all skills of the first skill manager
+        execution_id = self.sli.execute(agent0.name, [agent0skills[self.skill_to_test]])#Execute a skill
+        if not(self.event.wait(1.0)):
+            return "No Monitored Callback"
+        rospy.sleep(1.0)
+        self.event.clear()
+        self.new_message = None
+        self.sli.preempt_one(tid=execution_id)
+        if not(self.event.wait(1.0)):
+            return "No Monitored Callback after preemption"
+        return "Success"
+
+if __name__ == '__main__':
+    tester = TestSkiros2Skill()
+    tester.setUp('param_tester')
+    print tester.test_1()
+    tester.tearDown()
