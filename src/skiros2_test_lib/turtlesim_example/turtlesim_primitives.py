@@ -13,11 +13,6 @@ import math
 # Descriptions
 #################################################################################
 
-class Wait(SkillDescription):
-    def createDescription(self):
-        #=======Params=========
-        pass
-
 class Wander(SkillDescription):
     def createDescription(self):
         #=======Params=========
@@ -50,18 +45,6 @@ class TurtleSpawn(SkillDescription):
 #################################################################################
 # Implementations
 #################################################################################
-
-class wait(PrimitiveBase):
-    """
-    """
-    def createDescription(self):
-        self.setDescription(Wait(), self.__class__.__name__)
-
-    def onPreempt(self):
-        return self.success("Done")
-
-    def execute(self):
-        return self.step("")
 
 class wander_around(PrimitiveBase):
     """
