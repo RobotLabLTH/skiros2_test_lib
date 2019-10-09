@@ -106,6 +106,10 @@ class monitor(PrimitiveBase):
         self._pose = None
         return True
 
+    def onEnd(self):
+        del self._pose_sub
+        return True
+
     def _monitor(self, msg):
         self._pose = [msg.x, msg.y, msg.theta]
 
@@ -113,7 +117,11 @@ class monitor(PrimitiveBase):
         if self._pose is None:
             return self.step("No pose received")
 
+        if numpy.isnan(self._pose).any():
+            return self.fail("Nan in turtle {} pose. {}".format(self.params["Turtle"].value.label, self._pose), -101)
+
         x,y,theta = self._pose
+
         turtle = self.params["Turtle"].value
         turtle.setData(":Position", [x, y, 0.0])
         turtle.setData(":OrientationEuler", [0.0, 0.0, theta])
