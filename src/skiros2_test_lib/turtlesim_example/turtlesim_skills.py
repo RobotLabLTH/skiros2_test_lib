@@ -41,12 +41,10 @@ class move(SkillBase):
     def expand(self, skill):
         velocity = self.params["Linear"].value / self.params["Duration"].value
         angular_velocity = self.params["Angular"].value / self.params["Duration"].value
-        skill.setProcessor(Sequential())
+        skill.setProcessor(ParallelFs())
         skill(
-            self.skill(ParallelFs())(
-                self.skill("Command", "command", specify={"Linear": velocity, "Angular": angular_velocity}),
-                self.skill("Wait", "wait", specify={"Duration": self.params["Duration"].value})
-            )
+            self.skill("Command", "command", specify={"Linear": velocity, "Angular": angular_velocity}),
+            self.skill("Wait", "wait", specify={"Duration": self.params["Duration"].value})
         )
 
 class AttractTo(SkillDescription):
