@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://rvmi.aau.dk/ontologies/tts.owl#"
-     xml:tts="http://rvmi.aau.dk/ontologies/tts.owl"
+<rdf:RDF xmlns="http://rvmi.aau.dk/ontologies/turtlebot.owl#"
+     xml:turtlebot="http://rvmi.aau.dk/ontologies/turtlebot.owl"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:skiros="http://rvmi.aau.dk/ontologies/skiros.owl#"
-     xmlns:tts="http://rvmi.aau.dk/ontologies/tts.owl#">
-    <owl:Ontology rdf:about="http://rvmi.aau.dk/ontologies/tts.owl">
+     xmlns:turtlebot="http://rvmi.aau.dk/ontologies/turtlebot.owl#">
+    <owl:Ontology rdf:about="http://rvmi.aau.dk/ontologies/turtlebot.owl">
         <owl:imports rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl"/>
     </owl:Ontology>
 
@@ -21,9 +21,9 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <!-- http://rvmi.aau.dk/ontologies/tts.owl#TurtleName -->
+    <!-- http://rvmi.aau.dk/ontologies/turtlebot.owl#TurtleName -->
 
-    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/tts.owl#TurtleName"/>
+    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/turtlebot.owl#TurtleName"/>
 
     <!--
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -34,12 +34,12 @@
      -->
 
 
-    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#tts_robot -->
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#turtle_robot -->
 
-    <owl:NamedIndividual rdf:about="http://rvmi.aau.dk/ontologies/tts.owl#tts_robot">
+    <owl:NamedIndividual rdf:about="http://rvmi.aau.dk/ontologies/turtlebot.owl#turtle_robot">
         <rdf:type rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#Robot"/>
         <skiros:DiscreteReasoner>AauSpatialReasoner</skiros:DiscreteReasoner>
-        <skiros:SkillMgr>/tts_robot</skiros:SkillMgr>
+        <skiros:SkillMgr>/turtlebot_robot</skiros:SkillMgr>
         <TurtleName>/turtle1</TurtleName>
         <skiros:DiscreteReasoner>AauSpatialReasoner</skiros:DiscreteReasoner>
         <skiros:OrientationW rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1</skiros:OrientationW>

@@ -11,42 +11,6 @@ import threading, Queue, numpy
 import numpy as np
 import math
 
-#################################################################################
-# Command
-#################################################################################
-
-class Command(SkillDescription):
-    def createDescription(self):
-        self.addParam("Turtle", Element("cora:Robot"), ParamTypes.Required)
-        self.addParam("Linear", float, ParamTypes.Required, "Linear velocity")
-        self.addParam("Angular", float, ParamTypes.Required, "Angular velocity in degrees")
-
-class command(PrimitiveBase):
-    def createDescription(self):
-        self.setDescription(Command(), self.__class__.__name__)
-
-    def _send_command(self, linear, angular):
-        msg = Twist()
-        msg.linear.x = linear
-        msg.angular.z = math.radians(angular)
-        self.pose_pub.publish(msg)
-
-    def onPreempt(self):
-        return self.success("Stopped")
-
-    def onEnd(self):
-        self._send_command(0,0)
-        return True
-
-    def onStart(self):
-        turtle = self.params["Turtle"].value.getProperty("tts:TurtleName").value
-        self.pose_pub = rospy.Publisher(turtle + "/cmd_vel", Twist, queue_size=20)
-        return True
-
-    def execute(self):
-        self._send_command(self.params["Linear"].value, self.params["Angular"].value)
-        return self.step("Running")
-
 
 #################################################################################
 # Spawn
@@ -75,8 +39,8 @@ class spawn(PrimitiveBase):
             except rospy.ServiceException, e:
                 return self.fail("Spawning turtle failed.", -1)
 
-            turtle.label = name
-            turtle.setProperty("tts:TurtleName", "/{}".format(name))
+            turtle.label = "turtlebot:" + name
+            turtle.setProperty("turtlebot:TurtleName", "/{}".format(name))
             turtle.setData(":Position", [self.params["X"].value, self.params["Y"].value, 0.0])
             turtle.setData(":OrientationEuler", [0.0, 0.0, math.radians(self.params["Rotation"].value)])
             turtle.addRelation("skiros:Scene-0", "skiros:contain", "-1")
@@ -85,6 +49,44 @@ class spawn(PrimitiveBase):
 
             return self.success("Spawned turtle {}".format(name))
         return self.success("")
+
+
+#################################################################################
+# Command
+#################################################################################
+
+class Command(SkillDescription):
+    def createDescription(self):
+        self.addParam("Turtle", Element("cora:Robot"), ParamTypes.Required)
+        self.addParam("Linear", float, ParamTypes.Required, "Linear velocity")
+        self.addParam("Angular", float, ParamTypes.Required, "Angular velocity in degrees")
+
+class command(PrimitiveBase):
+    def createDescription(self):
+        self.setDescription(Command(), self.__class__.__name__)
+
+    def _send_command(self, linear, angular):
+        msg = Twist()
+        msg.linear.x = linear
+        msg.angular.z = math.radians(angular)
+        self.pose_pub.publish(msg)
+
+    def onPreempt(self):
+        return self.success("Stopped")
+
+    def onEnd(self):
+        self._send_command(0,0)
+        return True
+
+    def onStart(self):
+        turtle = self.params["Turtle"].value.getProperty("turtlebot:TurtleName").value
+        self.pose_pub = rospy.Publisher(turtle + "/cmd_vel", Twist, queue_size=20)
+        return True
+
+    def execute(self):
+        turtle = self.params["Turtle"].value.getProperty("turtlebot:TurtleName").value
+        self._send_command(self.params["Linear"].value, self.params["Angular"].value)
+        return self.step("{}: moving at [{} {}]".format(turtle, self.params["Linear"].value, self.params["Angular"].value))
 
 
 #################################################################################
@@ -100,14 +102,18 @@ class monitor(PrimitiveBase):
     def createDescription(self):
         self.setDescription(Monitor(), self.__class__.__name__)
 
+    def onPreempt(self):
+        return self.success("Stopped.")
+
     def onStart(self):
-        name = self.params["Turtle"].value.getProperty("tts:TurtleName").value
+        name = self.params["Turtle"].value.getProperty("turtlebot:TurtleName").value
         self._pose_sub = rospy.Subscriber(name + "/pose", ts.Pose, self._monitor)
         self._pose = None
         return True
 
     def onEnd(self):
-        del self._pose_sub
+        self._pose_sub.unregister()
+        self._pose_sub = None
         return True
 
     def _monitor(self, msg):
@@ -116,9 +122,6 @@ class monitor(PrimitiveBase):
     def execute(self):
         if self._pose is None:
             return self.step("No pose received")
-
-        if numpy.isnan(self._pose).any():
-            return self.fail("Nan in turtle {} pose. {}".format(self.params["Turtle"].value.label, self._pose), -101)
 
         x,y,theta = self._pose
 
@@ -130,13 +133,20 @@ class monitor(PrimitiveBase):
         return self.step("")
 
 
+
+#################################################################################
+# PoseController
+#################################################################################
+
 class PoseController(SkillDescription):
     def createDescription(self):
         #=======Params=========
+        self.addParam("Catch", False, ParamTypes.Required)
         self.addParam("Turtle", Element("cora:Robot"), ParamTypes.Required)
         self.addParam("Target", Element("sumo:Object"), ParamTypes.Required)
         self.addParam("Linear", float, ParamTypes.Optional)
         self.addParam("Angular", float, ParamTypes.Optional)
+        self.addParam("MinVel", float, ParamTypes.Optional)
 
 class pose_controller(PrimitiveBase):
     def createDescription(self):
@@ -151,6 +161,12 @@ class pose_controller(PrimitiveBase):
         vec = target_pos - turtle_pos
         distance = np.linalg.norm(vec)
 
+        if self.params["MinVel"].value is not None:
+            distance = max(self.params["MinVel"].value, distance)
+
+        if self.params["Catch"].value and distance <= 0.001:
+            return self.success("{} caught {}".format(turtle.label, target.label))
+
         turtle_rot = turtle.getData(":OrientationEuler")[2]
 
         a = vec / distance
@@ -160,4 +176,5 @@ class pose_controller(PrimitiveBase):
         self.params["Linear"].value = distance / 4.0
         self.params["Angular"].value = math.degrees(angle) / 2.0
 
-        return self.step("Vel: {} / {}".format(self.params["Linear"].value, self.params["Angular"].value))
+        return self.step("")
+
