@@ -72,7 +72,7 @@ class command(PrimitiveBase):
         self.pose_pub.publish(msg)
 
     def onPreempt(self):
-        return self.success("Stopped")
+        return self.success("Preempted")
 
     def onEnd(self):
         self._send_command(0,0)
@@ -103,7 +103,7 @@ class monitor(PrimitiveBase):
         self.setDescription(Monitor(), self.__class__.__name__)
 
     def onPreempt(self):
-        return self.success("Stopped.")
+        return self.success("Preempted.")
 
     def onStart(self):
         name = self.params["Turtle"].value.getProperty("turtlebot:TurtleName").value
@@ -151,6 +151,9 @@ class PoseController(SkillDescription):
 class pose_controller(PrimitiveBase):
     def createDescription(self):
         self.setDescription(PoseController(), self.__class__.__name__)
+
+    def onPreempt(self):
+        return self.success("Preempted.")
 
     def execute(self):
         turtle = self.params["Turtle"].value
