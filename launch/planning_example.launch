@@ -5,7 +5,7 @@
     <arg name="init_scene" value="planning_scene.turtle"/>
     <arg name="deploy" value="$(arg deploy)"/>
     <arg name="primitive_list" default="[]"/>
-    <arg name="skill_list" value="[locate_fake, drive_fake, pick_fake, place_fake, task_plan]" />
+    <arg name="skill_list" value="[drive_fake, pick_fake, place_fake, task_plan]" />
     <arg name="gui" default="true"/>
   </include>
   <include file="$(find skiros2)/launch/task_mgr.launch">

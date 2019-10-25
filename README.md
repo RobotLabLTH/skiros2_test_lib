@@ -28,9 +28,11 @@ Note: you should have installed the Fast Downward planner using the script in `s
 
 ```roslaunch skiros2_test_lib planning_example.launch```
 
-Run "task_plan" skill from skiros GUI with a Goal in PDDL format, e.g.:
+Run "task_plan" skill from skiros GUI with a Goal in PDDL format. For example:
 
-```(skiros:contain skiros:LargeBox-80 skiros:Starter-145)```
+Place starter 145 in box 80: `(skiros:contain skiros:LargeBox-80 skiros:Starter-145)`  
+
+Place all starters in box 80: `(forall (?x - skiros:Product) (skiros:contain skiros:LargeBox-51 ?x) )`  
 
 ### Turtlesim example
 

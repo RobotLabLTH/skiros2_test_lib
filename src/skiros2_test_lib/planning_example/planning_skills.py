@@ -14,15 +14,15 @@ class Locate(SkillDescription):
         self.addParam("Camera", Element("skiros:Camera"), ParamTypes.Required, [ParamOptions.Lock])
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Container", True))
-        self.addPreCondition(self.getAbstractRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True));
+        self.addPreCondition(self.getAbstractRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True))
         #=======PostConditions=========
-        self.addPostCondition(self.getRelationCond("InContainer", "skiros:contain", "Container", "Object", True));
+        self.addPostCondition(self.getRelationCond("InContainer", "skiros:contain", "Container", "Object", True))
         self.addPostCondition(self.getHasPropCond("HasPosition", "skiros:Position", "Object", True))
 
 class Drive(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Required)
+        self.addParam("StartLocation", Element("skiros:Location"), ParamTypes.Inferred)
         self.addParam("TargetLocation", Element("skiros:Location"), ParamTypes.Required)
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "StartLocation", True))
@@ -33,14 +33,14 @@ class Drive(SkillDescription):
 class Pick(SkillDescription):
     def createDescription(self):
         #=======Params=========
-        self.addParam("Container", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("Object", Element("skiros:Product"), ParamTypes.Optional)
+        self.addParam("Container", Element("skiros:Location"), ParamTypes.Inferred)
+        self.addParam("Object", Element("skiros:Product"), ParamTypes.Required)
         self.addParam("Arm", Element("rparts:ArmDevice"), ParamTypes.Required)
-        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Required)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         #=======PreConditions=========
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPreCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
-        self.addPreCondition(self.getRelationCond("ObjectInContainer", "skiros:contain", "Container", "Object", True));
+        self.addPreCondition(self.getRelationCond("ObjectInContainer", "skiros:contain", "Container", "Object", True))
         #=======PostConditions=========
         self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", False))
         self.addPostCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
@@ -50,19 +50,15 @@ class Place(SkillDescription):
     def createDescription(self):
         #=======Params=========
         self.addParam("PlacingLocation", Element("skiros:Location"), ParamTypes.Required)
-        self.addParam("Object", Element("skiros:Product"), ParamTypes.Required)
         self.addParam("Arm", Element("rparts:ArmDevice"), ParamTypes.Required)
-        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Required)
+        self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
+        self.addParam("Object", Element("skiros:Product"), ParamTypes.Inferred)
         #=======PreConditions=========
-
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "PlacingLocation", True))
-        self.addPreCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True));
-        #self.addPreCondition(self.getPropCond("LocationEmpty", ":ContainerState", "PlacingLocation", "=", "Empty", True));
+        self.addPreCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True))
         #=======PostConditions=========
-        self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False));
-        #self.addPostCondition(self.getPropCond("LocationEmpty", ":ContainerState", "PlacingLocation", "=", "Empty", False));
-        self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True));
-        self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True));
+        self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False))
+        self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True))
 
 #################################################################################
 # Implementation
