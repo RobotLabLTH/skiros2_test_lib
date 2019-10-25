@@ -11,7 +11,7 @@ class Locate(SkillDescription):
         #=======Params=========
         self.addParam("Container", Element("skiros:Location"), ParamTypes.Required)
         self.addParam("Object", Element("skiros:Product"), ParamTypes.Optional)
-        self.addParam("Camera", Element("skiros:Camera"), ParamTypes.Required, [ParamOptions.Lock])
+        self.addParam("Camera", Element("skiros:DepthCamera"), ParamTypes.Required, [ParamOptions.Lock])
         #=======PreConditions=========
         self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "Container", True))
         self.addPreCondition(self.getAbstractRelationCond("ContainerForObject", "skiros:partReference", "Container", "Object", True))
@@ -39,11 +39,11 @@ class Pick(SkillDescription):
         self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         #=======PreConditions=========
         self.addPreCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
-        self.addPreCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
         self.addPreCondition(self.getRelationCond("ObjectInContainer", "skiros:contain", "Container", "Object", True))
+        #=======HoldConditions=========
+        self.addHoldCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
         #=======PostConditions=========
         self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", False))
-        self.addPostCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "Container", True))
         self.addPostCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True))
 
 class Place(SkillDescription):
@@ -54,9 +54,11 @@ class Place(SkillDescription):
         self.addParam("Gripper", Element("rparts:GripperEffector"), ParamTypes.Inferred)
         self.addParam("Object", Element("skiros:Product"), ParamTypes.Inferred)
         #=======PreConditions=========
-        self.addPreCondition(self.getRelationCond("RobotAt", "skiros:at", "Robot", "PlacingLocation", True))
         self.addPreCondition(self.getRelationCond("Holding", "skiros:contain", "Gripper", "Object", True))
+        #=======HoldConditions=========
+        self.addHoldCondition(self.getRelationCond("RobotAtLocation", "skiros:at", "Robot", "PlacingLocation", True))
         #=======PostConditions=========
+        self.addPostCondition(self.getPropCond("EmptyHanded", "skiros:ContainerState", "Gripper", "=", "Empty", True))
         self.addPostCondition(self.getRelationCond("NotHolding", "skiros:contain", "Gripper", "Object", False))
         self.addPostCondition(self.getRelationCond("InPlace", "skiros:contain", "PlacingLocation", "Object", True))
 
