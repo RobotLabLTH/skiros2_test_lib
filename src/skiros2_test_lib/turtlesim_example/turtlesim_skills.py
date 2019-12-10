@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, Serial, ParallelFf, ParallelFs, Selector, Sequential
+from skiros2_skill.core.skill import SkillDescription, SkillBase, Serial, ParallelFf, ParallelFs, Selector, SerialStar
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 
@@ -27,7 +27,7 @@ class spawn_random(SkillBase):
         y = np.random.uniform(low=range_y[0], high=range_y[1])
         r = np.random.uniform(low=range_r[0], high=range_r[1])
 
-        skill.setProcessor(Sequential())
+        skill.setProcessor(SerialStar())
         skill(self.skill("Spawn", "spawn", specify={"X": x, "Y": y, "Rotation": r}))
 
 
@@ -89,12 +89,12 @@ class patrol(SkillBase):
         ]
 
         if self.params["Once"].value:
-            skill.setProcessor(Sequential())
+            skill.setProcessor(SerialStar())
             skill(*path)
         else:
             skill.setProcessor(ParallelFf())
             skill(
-                self.skill(Sequential())(*path),
+                self.skill(SerialStar())(*path),
                 self.skill("Wait", "wait", specify={"Duration": 10000.0})
             )
 

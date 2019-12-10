@@ -1,4 +1,4 @@
-from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, State, ParallelFf, Sequential
+from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, State, ParallelFf, SerialStar
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.params import ParamTypes
 
@@ -50,7 +50,7 @@ class test_skill_sequence(SkillBase):
         self.setDescription(TestSkill(), self.__class__.__name__)
 
     def expand(self, skill):
-        skill.setProcessor(Sequential())
+        skill.setProcessor(SerialStar())
         skill(
             self.skill("TestPrimitive", ""),
             self.skill("TestPrimitive", "", specify={"Force": 1.0})
@@ -74,8 +74,8 @@ class test_skill_sequence_of_parallels(SkillBase):
         self.setDescription(TestSkill(), self.__class__.__name__)
 
     def expand(self, skill):
-        self.setProcessor(Sequential())
-        skill.setProcessor(Sequential())
+        self.setProcessor(SerialStar())
+        skill.setProcessor(SerialStar())
         skill(
             self.skill("TestSkill", "test_skill_parallel"),
             self.skill("TestSkill", "test_skill_parallel"),
