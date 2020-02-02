@@ -49,7 +49,7 @@ class WorldModelTester(unittest.TestCase):
         return self.assert_equal(res[0].id, self.contexts[context]['robot'].id, "resolve")
 
     def remove(self):
-        for cid, c in self.contexts.iteritems():
+        for cid, c in self.contexts.items():
             for e in c.values():
                 log.assertInfo(self._verbose, "Removed", "{} {}".format(cid, e.id))
                 self.wmi.remove_element(e.id, context_id=cid)
@@ -57,7 +57,7 @@ class WorldModelTester(unittest.TestCase):
 
     def _print_recursive(self, name, d, indentation=""):
         e = d[name]
-        print "{}->{}".format(indentation, e.printState())
+        print("{}->{}".format(indentation, e.printState()))
         for r in e.getRelations(subj="-1", pred=self.wmi.get_sub_properties("skiros:spatiallyRelated")):
             self._print_recursive(r['dst'], d, indentation+"--")
 
