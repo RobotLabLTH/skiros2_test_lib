@@ -35,7 +35,7 @@ class test_primitive(PrimitiveBase):
     def onStart(self):
         self.index = 0
         f = self.params["Force"].value
-        print "Send force {}".format(f)
+        print("Send force {}".format(f))
         return True
 
     def execute(self):

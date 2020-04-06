@@ -6,7 +6,7 @@ import rospy
 import turtlesim.msg as ts
 from geometry_msgs.msg import Twist
 from turtlesim.srv import Spawn as SpawnSrv
-import threading, Queue, numpy
+import threading, numpy
 
 import numpy as np
 import math
@@ -36,7 +36,7 @@ class spawn(PrimitiveBase):
             try:
                 spawner = rospy.ServiceProxy('spawn', SpawnSrv)
                 resp = spawner(self.params["X"].value , self.params["Y"].value, math.radians(self.params["Rotation"].value), name)
-            except rospy.ServiceException, e:
+            except rospy.ServiceException as e:
                 return self.fail("Spawning turtle failed.", -1)
 
             turtle.label = "turtlebot:" + name

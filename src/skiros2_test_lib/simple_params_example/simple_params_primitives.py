@@ -2,7 +2,11 @@ from skiros2_skill.core.skill import SkillDescription, ParamOptions
 from skiros2_common.core.params import ParamTypes
 from skiros2_common.core.world_element import Element
 from skiros2_common.core.primitive import PrimitiveBase
-import threading, Queue
+import threading
+try:
+    import Queue as queue
+except ImportError:
+    import queue
 
 #################################################################################
 # Descriptions
@@ -36,7 +40,7 @@ class trajectory_generator(PrimitiveBase):
 
     Since parameters can be updated ONLY in the EXECUTE function, a syncronized queue is necessary
     """
-    q = Queue.Queue(1)
+    q = queue.Queue(1)
     is_done = False
     iterations = 2
 
