@@ -37,7 +37,6 @@ include_directories(
 
 
 catkin_install_python(PROGRAMS
-  src/skiros2_test_lib/action_example/test_action_server
   test/single_skill_test
   test/skiros_doc_test
   test/world_model_test
