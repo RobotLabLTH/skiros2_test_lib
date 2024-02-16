@@ -1,5 +1,5 @@
 <launch>
-  <include file="$(find skiros2)/launch/skiros.launch">
+  <include file="$(find-pkg-share skiros2)/skiros2.launch.py">
     <arg name="primitive_list" value="[test_primitive]"/>
     <arg name="skill_list" value="[test_skill_parallel, test_skill_sequence, test_skill_sequence_of_parallels]" />
     <arg name="deploy" value="false" />

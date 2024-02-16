@@ -4,6 +4,6 @@ Test package for [skiros2](https://github.com/RVMI/skiros2).
 
 ## Run
 
-Single components testing:
+# Single components testing:
 
-```rosrun skiros2_test_lib skiros_doc_test```
+# ```ros2 run skiros2_test_lib skiros_doc_test```
