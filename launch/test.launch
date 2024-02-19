@@ -1,8 +1,9 @@
 <launch>
+  <arg name="deploy" default="true" />
   <include file="$(find skiros2)/launch/skiros.launch">
-    <arg name="primitive_list" value="[test_primitive]"/>
-    <arg name="skill_list" value="[test_skill_parallel, test_skill_sequence, test_skill_sequence_of_parallels]" />
-    <arg name="deploy" value="false" />
+    <arg name="libraries_list" value="[skiros2_test_lib]" />
+    <arg name="skill_list" value="[test_primitive, test_skill_parallel, test_skill_sequence, test_skill_sequence_of_parallels]" />
+    <arg name="deploy" value="$(arg deploy)" />
     <arg name="gui" value="true"/>
   </include>
 </launch>
