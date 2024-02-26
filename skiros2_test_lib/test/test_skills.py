@@ -2,6 +2,8 @@ from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, Stat
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.params import ParamTypes
 
+import skiros2_common.tools.logger as log
+
 #################################################################################
 # Description
 #################################################################################
@@ -35,7 +37,7 @@ class test_primitive(PrimitiveBase):
     def onStart(self):
         self.index = 0
         f = self.params["Force"].value
-        print("Send force {}".format(f))
+        log.info("TestPrimitive", "Send force {}".format(f))
         return True
 
     def execute(self):
