@@ -1,6 +1,9 @@
 from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, State, ParallelFf, SerialStar
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.params import ParamTypes
+from skiros2_std_skills.action_client_primitive import PrimitiveActionClient
+from rclpy import action
+from skiros2_msgs.action import TestAction
 
 import skiros2_common.tools.logger as log
 
@@ -83,3 +86,33 @@ class test_skill_sequence_of_parallels(SkillBase):
             self.skill("TestSkill", "test_skill_parallel"),
             self.skill("TestSkill", "test_skill_parallel"),
         )
+
+class test_action_server(PrimitiveActionClient):
+    def createDescription(self):
+        self.setDescription(TestSkill(), self.__class__.__name__)
+
+    def buildClient(self)->action.ActionClient:
+        """pass
+        @brief To override. Called when starting the skill
+        @return an action client (e.g. actionlib.SimpleActionClient)
+        """
+        return action.ActionClient(
+            self.node, 
+            TestAction, 
+            "/test_action")
+
+    def buildGoal(self):
+        """
+        @brief To override. Called when starting the skill
+        @return an action msg initialized
+        """
+        return TestAction.Goal(ticks=15)
+
+    def onFeedback(self, msg: TestAction.Feedback):
+        
+        """
+        @brief To override. Called every time a new feedback msg is received.
+        @return Can return self.success, self.fail or self.step
+        """
+        #Do something with feedback msg
+        return self.step("Progress: %d" % msg.progress)
