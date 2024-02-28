@@ -13,7 +13,7 @@
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>skiros2</exec_depend>
-  <exec_depend>skiros2_std_lib</exec_depend>
+  <exec_depend>skiros2_std_skills</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>
