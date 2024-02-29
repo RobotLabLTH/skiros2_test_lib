@@ -1,0 +1,53 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skiros: <http://rvmi.aau.dk/ontologies/skiros.owl#> .
+@prefix test: <http://rvmi.aau.dk/ontologies/test.owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+skiros:Scene-0 a skiros:Scene,
+        owl:NamedIndividual ;
+    rdfs:label "Test Scene" ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "map"^^xsd:string ;
+    skiros:OrientationW "1.0"^^xsd:float ;
+    skiros:OrientationX "0.0"^^xsd:float ;
+    skiros:OrientationY "0.0"^^xsd:float ;
+    skiros:OrientationZ "0.0"^^xsd:float ;
+    skiros:PositionX "0.0"^^xsd:float ;
+    skiros:PositionY "0.0"^^xsd:float ;
+    skiros:PositionZ "0.0"^^xsd:float ;
+    skiros:contain skiros:TransformationPose-10 .
+
+skiros:TransformationPose-10 a skiros:TransformationPose,
+    owl:NamedIndividual ;
+    rdfs:label "Test position 1" ;
+    skiros:BaseFrameId "map"^^xsd:string ;
+    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+    skiros:FrameId "skiros:TransformationPose-10"^^xsd:string ;
+    skiros:OrientationW "1.0"^^xsd:float ;
+    skiros:OrientationX "0.0"^^xsd:float ;
+    skiros:OrientationY "0.0"^^xsd:float ;
+    skiros:OrientationZ "0.0"^^xsd:float ;
+    skiros:PositionX "1.0"^^xsd:float ;
+    skiros:PositionY "1.0"^^xsd:float ;
+    skiros:PositionZ "0.0"^^xsd:float ;
+    skiros:PublishTf true .
+
+
+#test:TestRobot-1 a test:TestRobot,
+#        owl:NamedIndividual ;
+#    rdfs:label "test:test_robot-001" ;
+#    skiros:BaseFrameId "map"^^xsd:string ;
+#    skiros:DiscreteReasoner "AauSpatialReasoner"^^xsd:string ;
+#    skiros:FrameId "test:TestRobot-1"^^xsd:string ;
+#    skiros:OrientationW "1.0"^^xsd:float ;
+#    skiros:OrientationX "0.0"^^xsd:float ;
+#    skiros:OrientationY "0.0"^^xsd:float ;
+#    skiros:OrientationZ "0.0"^^xsd:float ;
+#    skiros:PositionX "1.0"^^xsd:float ;
+#    skiros:PositionY "0.0"^^xsd:float ;
+#    skiros:PositionZ "0.1"^^xsd:float ;
+#   skiros:PublishTf true ;
+#    skiros:SkillMgr "test_robot"^^xsd:string ;
+#    skiros:Template "test:test_robot"^^xsd:string ;
+#    skiros:hasTemplate test:test_robot .

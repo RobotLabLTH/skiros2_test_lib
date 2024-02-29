@@ -2,8 +2,10 @@ from skiros2_skill.core.skill import SkillDescription, SkillBase, Selector, Stat
 from skiros2_common.core.primitive import PrimitiveBase
 from skiros2_common.core.params import ParamTypes
 from skiros2_std_skills.action_client_primitive import PrimitiveActionClient
-from rclpy import action
+from skiros2_std_skills.service_client_primitive import PrimitiveServiceClient
+from rclpy import action, client
 from skiros2_msgs.action import TestAction
+from std_srvs.srv import SetBool
 
 import skiros2_common.tools.logger as log
 
@@ -88,6 +90,8 @@ class test_skill_sequence_of_parallels(SkillBase):
         )
 
 class test_action_server(PrimitiveActionClient):
+    feedback_timeout_sec = 2
+
     def createDescription(self):
         self.setDescription(TestSkill(), self.__class__.__name__)
 
@@ -96,6 +100,7 @@ class test_action_server(PrimitiveActionClient):
         @brief To override. Called when starting the skill
         @return an action client (e.g. actionlib.SimpleActionClient)
         """
+
         return action.ActionClient(
             self.node, 
             TestAction, 
@@ -103,7 +108,7 @@ class test_action_server(PrimitiveActionClient):
 
     def buildGoal(self):
         """
-        @brief To override. Called when starting the skill
+        @brief To override. Called when starting the skillpass
         @return an action msg initialized
         """
         return TestAction.Goal(ticks=15)
@@ -116,3 +121,25 @@ class test_action_server(PrimitiveActionClient):
         """
         #Do something with feedback msg
         return self.step("Progress: %d" % msg.progress)
+    
+
+class test_service_server(PrimitiveServiceClient):
+    def createDescription(self):
+        self.setDescription(TestSkill(), self.__class__.__name__)
+    
+    def buildClient(self)->client.Client:
+        """
+        @brief To override. Called when starting the skill
+        @return an service client created by self.node.create_client(...)
+        """
+        return self.node.create_client(SetBool, "/set_bool")
+
+    def buildRequest(self):
+        """
+        @brief To override. Called when starting the skill
+        @return an action msg initialized
+        """
+        return SetBool.Request(data=True)
+    
+    def onDone(self, response: SetBool.Response):
+        return self.success("Got response from service: %s" % response)
